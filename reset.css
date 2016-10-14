@@ -15,7 +15,7 @@ table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, canvas, details, embed, 
 figure, figcaption, footer, header, hgroup, 
 menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
+time, mark, audio, video, {
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -25,7 +25,7 @@ time, mark, audio, video {
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
+footer, header, hgroup, menu, nav, section, {
 	display: block;
 }
 body {
@@ -393,8 +393,104 @@ footer {
 	margin: 10px 0;
 }
 
-/*FILES*/
+/*LOGIN*/
 
-files button{
+
+
+#login{
+
+	margin: 0 auto;
+	padding: 60px 0;
+	background-image: url("images/hero.jpg");
+
+
+	}
+.container{
+	width: 500px;
+	height: 400px;
+	text-align: center;
+	background-color: rgba(62,83,104,0.2);
+	/* translucent white background-> 
+	(can't decide which one in nicer)
+	or maybe I should get a darker grey?
+	ALSO!! THE LAST NUMBER 0.0-1.0 is how you adjust the opacity!! :D
+	background: rgba(255, 255, 255, .6);*/
+	border-radius: 4px;
+	margin: 0 auto;
+	margin-top:150px;
+
 
 }
+.container img{
+	width: 120px; 
+	height: 120px;
+	margin-top: -60px;
+	margin-bottom: 30px;
+
+}
+input[type="text"], input[type="password"]{
+	height: 45px;
+	width: 300px;
+	font-size: 18px;
+	margin-bottom: 20px;
+	background-color: #fff;
+	padding-left: 40px;
+	border-radius: 3px;
+	border:none;
+}
+/*This is for the icons in the login fields*/
+.form-input::before{
+	content: "\f007";
+	position: absolute;
+	font-family: "FontAwesome";
+	padding-left:5px;
+	padding-top: 7px;
+	font-size: 35px;
+	/*color:; i think the color is alright actually*/
+}
+
+.form-input:nth-child(2)::before{
+	content: "\f023";
+}
+
+.btn-login{
+	/*padding:15px 25px;
+	color:#fff;
+	border:none;
+	border-radius: 4px;*/
+	
+	cursor: pointer;
+	display: block;
+	margin: 0 auto;
+	border: 2px solid #fff;
+	color: #fff;
+	border-radius: 3px;
+	width: 180px;
+	height: 50px;
+	font-size: 20px;
+	line-height: 50px;
+	background-color: rgba(62,83,104,0.2);
+	margin-bottom: 20px;
+	
+
+}
+
+.btn-login:hover{
+	background-color: #02b8dd;
+	color: #fff;
+	border:none;
+
+}
+
+.fp{
+	text-decoration: none;
+	color: #444;
+}
+
+.fp:hover{
+	color: #fff;
+}
+
+}
+
+
