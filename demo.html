@@ -12,6 +12,46 @@
 	<link href='http://fonts.googleapis.com/css?family=Crete+Round' rel='stylesheet' type='text/css'>
 
 	<title>Join the club!</title>
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
+        <title>HiveMQ MQTT Websocket Demo App</title>
+        <script type="text/javascript">
+ // Create a client with the Paho Api. set it to the correct broker ip, port and your "signature"
+ var client = new Paho.MQTT.Client("176.10.136.208", 9001, "web");
+ //Gets  called if the websocket/mqtt connection gets disconnected for any reason
+ client.onConnectionLost = function (responseObject) {
+     //Messages if the connection is lost
+     alert("connection lost: " + responseObject.errorMessage);
+ };
+ //When a message is recieved from the topic you are subscribed to it gets printed.
+ client.onMessageArrived = function (message) {
+     //Do something with the push message you received
+     $('#messages').append('<span>Topic: ' + message.destinationName + '  | ' + message.payloadString + '</span><br/>');
+ };
+ //Theese are the options for the connection
+ var options = {
+     timeout: 3,
+     //Messages when the connection is established
+     onSuccess: function () {
+         alert("Connected");
+     },
+     //Messages if the connection was a failure
+     onFailure: function (message) {
+         alert("Connection failed: " + message.errorMessage);
+     }
+ };
+ // This is the publish method that takes the payload, topic and quality of service.
+ // It then creates a paho message with the values given and then sends it.
+ var publish = function (payload, topic, qos) {
+     var message = new Paho.MQTT.Message(payload);
+     message.destinationName = topic;
+     message.qos = qos;
+     client.send(message);
+ }
+ 
+        </script>
+
 </head>
 
 <body>
@@ -31,9 +71,27 @@
 <html>
 
 <div id ="login" > 
-Johan put your code here ;) 
+<div class="reg-container">
+<img src="images/features-icon-1.png" alt="Smiley face" height="120" width="auto">
+<form>
+		<b><font size="6" color ="white"> Connect to the broker<b/>
+		<button class="btn-login" onclick="client.connect(options);">1. Connect</button>
+	
+		<b>Subscribe to Topic: "topic"<b/>
+        <button class="btn-login" onclick="client.subscribe('topic', {qos: 2}); alert('Subscribed');">2. Subscribe</button>
+        
+        <input class="form-input" placeholder="Enter Message" type="text" name="messagebox" id="message" />
+        <br>
+        <b>Publish Message<b/>
+        <button class="btn-login" onclick="publish(document.getElementById('message').value,'topic',2);">3. Publish</button>
+        
+        <b>Disconnect from Broker<b/>
+        <button class="btn-login" onclick="client.disconnect();">(4. Disconnect)</button>
+        <br><br><br><br></font>
+        <div id="messages"></div> 
+        </form>
 </div>
-
+</div>
 <footer>
     	<div class="wrapper">
     		<div id="footer-info">
