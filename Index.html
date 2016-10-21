@@ -18,53 +18,54 @@
 </head>
  
 <body>
-	<header>
-		<div class="wrapper">
-			<h1>GoGo Deals<span class="color"></span></h1>
-			<nav>
-				<ul>
-					<li><a href="#">Home</a></li>
-					<li><a href="#">Deals</a></li>
-					<li><a href="#">Contact</a></li>
-					<li><a href="log-in.html">Log In</a></li>
-				</ul>
-			</nav>
-		</div>
-	</header>
-	
+  <header>
+    <div class="wrapper">
+      <h1>GoGo Deals<span class="color"></span></h1>
+      <nav>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Deals</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="log-in.html">Log In</a></li>
+          <li><a href="demo.html">Demo</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  
   <div id="hero-image">
     <div class="wrapper">
-    	<h2><strong>Find deals</strong><br/> near you</h2>
-    	<a href="#" class="button-1">Deal Heaven</a>
+      <h2><strong>Find deals</strong><br/> near you</h2>
+      <a href="#" class="button-1">Deal Heaven</a>
     </div>
   </div>
 
     <div id="features">
-    	<div class="wrapper">
-    		<ul>
-    			<li class="feature-1">
-    				<h4>Do You Like Food?</h4>
-    					<p>Located in GBG is one of Sweden's most up-and-coming trendyfood neighborhoods, Bergsjön! The only thing scary about this place is how delicious the food is. If you're up for an adventure, your tastebuds will thank you.</p>
-    			</li>
-    			<li class="feature-2">
-    				<h4>Like Us </h4>
-					<p>Like us on Facebook for your chance to win a 300:- gift card valid at any buniness providing deals on our platform.</p>
-    			</li>
-    			<li class="feature-3">
-    				<h4>Drinks All Around!</h4>
-					<p>This weekend will see record highs in GBG, make sure you know where to go to cool off with your friends. Check our app for drinks near you. From trendy to cozy, we've got a deal. </p>
-    			</li>
-    			<div class="clear"></div>
-    		</ul>
-    	</div>
+      <div class="wrapper">
+        <ul>
+          <li class="feature-1">
+            <h4>Do You Like Food?</h4>
+              <p>Located in GBG is one of Sweden's most up-and-coming trendyfood neighborhoods, Bergsjön! The only thing scary about this place is how delicious the food is. If you're up for an adventure, your tastebuds will thank you.</p>
+          </li>
+          <li class="feature-2">
+            <h4>Like Us </h4>
+          <p>Like us on Facebook for your chance to win a 300:- gift card valid at any buniness providing deals on our platform.</p>
+          </li>
+          <li class="feature-3">
+            <h4>Drinks All Around!</h4>
+          <p>This weekend will see record highs in GBG, make sure you know where to go to cool off with your friends. Check our app for drinks near you. From trendy to cozy, we've got a deal. </p>
+          </li>
+          <div class="clear"></div>
+        </ul>
+      </div>
     </div>
     <div id="primary-content">
-    	<div class="wrapper">
-    		<article>
-    			<h3>Deal of the Week</h3>
-    			<p>Every dream of the elusive family vacation but then realize you don't have a family? Let Hire A Fam plan the perfect family getaway! Prepare for a one-of-a-kind family vacation complete with hired - true to life - loving, crazy family members. Take a sneak peak at the magic your next vacation could be.</p>
-    			<a href="#"><img src="images/video-placeholder.jpg" alt="video placeholder"/></a>
-    		</article>
+      <div class="wrapper">
+        <article>
+          <h3>Deal of the Week</h3>
+          <p>Every dream of the elusive family vacation but then realize you don't have a family? Let Hire A Fam plan the perfect family getaway! Prepare for a one-of-a-kind family vacation complete with hired - true to life - loving, crazy family members. Take a sneak peak at the magic your next vacation could be.</p>
+          <a href="#"><img src="images/video-placeholder.jpg" alt="video placeholder"/></a>
+        </article>
         <article>
           <h6>
             <script>
@@ -94,7 +95,6 @@
 
 <script>
   function readBlob(opt_startByte, opt_stopByte) {
-
     var files = document.getElementById('files').files;
     if (!files.length) {
       alert('Please select a file!');
@@ -104,9 +104,7 @@
     var file = files[0];
     var start = parseInt(opt_startByte) || 0;
     var stop = parseInt(opt_stopByte) || file.size - 1;
-
     var reader = new FileReader();
-
     // If we use onloadend, we need to check the readyState.
     reader.onloadend = function(evt) {
       if (evt.target.readyState == FileReader.DONE) { // DONE == 2
@@ -116,7 +114,6 @@
              ' of ', file.size, ' byte file'].join('');
       }
     };
-
     var blob = file.slice(start, stop + 1);
     reader.readAsBinaryString(blob);
   }
@@ -146,17 +143,13 @@
 <script>
   function handleFileSelect(evt) {
     var files = evt.target.files; // FileList object
-
     // Loop through the FileList and render image files as thumbnails.
     for (var i = 0, f; f = files[i]; i++) {
-
       // Only process image files.
       if (!f.type.match('image.*')) {
         continue;
       }
-
       var reader = new FileReader();
-
       // Closure to capture the file information.
       reader.onload = (function(theFile) {
         return function(e) {
@@ -167,77 +160,75 @@
           document.getElementById('list').insertBefore(span, null);
         };
       })(f);
-
       // Read in the image file as a data URL.
       reader.readAsDataURL(f);
     }
   }
-
   document.getElementById('files').addEventListener('change', handleFileSelect, false);
 </script>
             </h6></article>
-    	</div>
+      </div>
     </div>
 
     <div id="secondary-content">
-    	<div class="wrapper">
-    		<article style="background-image:url('images/article-image-1.jpg');">
-    			<div class="overlay">
-    				<h4>Our Guide to Your Best Weekend Yet</h4>
-    				<p><small>Sometimes planning a weekend can be a hassle, don't worry about it though. If you want to have a great weekend without any of the work, let our weekend-planner do it for you. Just tell us what you like, what you don't like, and when you're free and we'll do the rest.</small></p>
-    				<a href="#" class="more-link">View more</a>
-    			</div>
-    		</article>
-    		<article style="background-image: url('images/article-image-2.jpg');">
-    			<div class="overlay">
-					<h4>Swedish Weather Got You Down?</h4>
-					<p><small>Take a weekend trip! Explore our luxurious mini-vacays from Sweden to warmer places such as Crete, Les Maldives, and Agadir. With daily flights from GBG and STHLM there is no time like the present to treat yourself. Go ahead, you deserve it.</small></p>
-					<a href="#" class="more-link">View more</a>
-				</div>
-    		</article><div class="clear"></div>
-    	</div>
+      <div class="wrapper">
+        <article style="background-image:url('images/article-image-1.jpg');">
+          <div class="overlay">
+            <h4>Our Guide to Your Best Weekend Yet</h4>
+            <p><small>Sometimes planning a weekend can be a hassle, don't worry about it though. If you want to have a great weekend without any of the work, let our weekend-planner do it for you. Just tell us what you like, what you don't like, and when you're free and we'll do the rest.</small></p>
+            <a href="#" class="more-link">View more</a>
+          </div>
+        </article>
+        <article style="background-image: url('images/article-image-2.jpg');">
+          <div class="overlay">
+          <h4>Swedish Weather Got You Down?</h4>
+          <p><small>Take a weekend trip! Explore our luxurious mini-vacays from Sweden to warmer places such as Crete, Les Maldives, and Agadir. With daily flights from GBG and STHLM there is no time like the present to treat yourself. Go ahead, you deserve it.</small></p>
+          <a href="#" class="more-link">View more</a>
+        </div>
+        </article><div class="clear"></div>
+      </div>
     </div>
 
     <div id="cta">
-    	<div class="wrapper">
-    		<h3>Not a Member?</h3>
-    		<p>No, problem! Sign-up today to access exclusive new food and drink selections just for you on Andra Lång this weekend.</p>
-    		<a href="register.html" class="button-2">Check it out</a>
-    	</div>
+      <div class="wrapper">
+        <h3>Not a Member?</h3>
+        <p>No, problem! Sign-up today to access exclusive new food and drink selections just for you on Andra Lång this weekend.</p>
+        <a href="register.html" class="button-2">Check it out</a>
+      </div>
     </div>
 
     <footer>
-    	<div class="wrapper">
-    		<div id="footer-info">
-    			<p>Copyright 2016 GoGoDeals. All rights reserved.</p>
-    			<p><a href="#">Terms of Service</a> | <a href="#">Privacy</a></p>
-    		</div>
-    		<div id="footer-links">
-    			<ul>
-    				<li><h5>Company</h5></li>
-    				<li><a href="#">About us</a></li>
-    				<li><a href="#">Meet The Team</a></li>
-    				<li><a href="#">What We Do</a></li>
-    				<li><a href="#">Careers</a></li>
-    			</ul>
-    			<!--<ul>
-    				<li><h5>Company</h5></li>
-    				<li><a href="#">About us</a></li>
-    				<li><a href="#">Meet The Team</a></li>
-    				<li><a href="#">What We Do</a></li>
-    				<li><a href="#">Careers</a></li>
-    			</ul>
-    			<ul>
-    				<li><h5>Company</h5></li>
-    				<li><a href="#">About us</a></li>
-    				<li><a href="#">Meet The Team</a></li>
-    				<li><a href="#">What We Do</a></li>
-    				<li><a href="#">Careers</a></li>
-    			</ul>!-->
-    			
-    		</div>
-    		<div class="clear"></div>
-    	</div>
+      <div class="wrapper">
+        <div id="footer-info">
+          <p>Copyright 2016 GoGoDeals. All rights reserved.</p>
+          <p><a href="#">Terms of Service</a> | <a href="#">Privacy</a></p>
+        </div>
+        <div id="footer-links">
+          <ul>
+            <li><h5>Company</h5></li>
+            <li><a href="#">About us</a></li>
+            <li><a href="#">Meet The Team</a></li>
+            <li><a href="#">What We Do</a></li>
+            <li><a href="#">Careers</a></li>
+          </ul>
+          <!--<ul>
+            <li><h5>Company</h5></li>
+            <li><a href="#">About us</a></li>
+            <li><a href="#">Meet The Team</a></li>
+            <li><a href="#">What We Do</a></li>
+            <li><a href="#">Careers</a></li>
+          </ul>
+          <ul>
+            <li><h5>Company</h5></li>
+            <li><a href="#">About us</a></li>
+            <li><a href="#">Meet The Team</a></li>
+            <li><a href="#">What We Do</a></li>
+            <li><a href="#">Careers</a></li>
+          </ul>!-->
+          
+        </div>
+        <div class="clear"></div>
+      </div>
     </footer>
 </body>
 </html>
