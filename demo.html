@@ -3,7 +3,7 @@
 <head>  
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
        
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="style.css">    
 
     <link rel="stylesheet" type="text/css" href="reset.css">
 
@@ -18,7 +18,8 @@
         <title>HiveMQ MQTT Websocket Demo App</title>
         <script type="text/javascript">
  // Create a client with the Paho Api. set it to the correct broker ip, port and your "signature"
- var client = new Paho.MQTT.Client("176.10.136.208", 9001, "web");
+ var client = new Paho.MQTT.Client("176.10.136.208", 9001, "web" + Math.random());
+ 
  //Gets  called if the websocket/mqtt connection gets disconnected for any reason
  client.onConnectionLost = function (responseObject) {
      //Messages if the connection is lost
@@ -34,7 +35,7 @@
      timeout: 3,
      //Messages when the connection is established
      onSuccess: function () {
-         alert("Connected");
+         client.subscribe('topic', {qos: 2});
      },
      //Messages if the connection was a failure
      onFailure: function (message) {
@@ -48,7 +49,10 @@
      message.destinationName = topic;
      message.qos = qos;
      client.send(message);
- }
+     //client.disconnect();
+ };
+ client.connect(options);
+
  
         </script>
 
@@ -60,7 +64,7 @@
             <h1>GoGo Deals<span class="color"></span></h1>
             <nav>
                 <ul>
-                    <li><a href="Index.html">Home</a></li>
+                    <li><a href="index.html">Home</a></li>
                     <li><a href="#">Deals</a></li>
                     <li><a href="#">Contact</a></li>
                     
@@ -72,28 +76,58 @@
 
 <div id ="login" > 
 <div class="reg-container">
-<img src="images/features-icon-1.png" alt="Smiley face" height="120" width="auto">
-<form>
-        <b><font size="6" color ="white"> Connect to the broker<b/>
-        <button class="btn-login" onclick="client.connect(options);">1. Connect</button>
-    
-        <b>Subscribe to Topic: "topic"<b/>
-        <button class="btn-login" onclick="client.subscribe('topic', {qos: 2}); alert('Subscribed');">2. Subscribe</button>
-        
-        <input class="form-input" placeholder="Enter Message" type="text" name="messagebox" id="message" />
+
+        <font size="5" color ="white">
+        <b>Publish deal</b>
+        </font>
         <br>
-        <b>Publish Message<b/>
-        <button class="btn-login" onclick="publish(document.getElementById('message').value,'topic',2);">3. Publish</button>
+        <br>
+        <font size="3" color ="white">
+        <b>Company name<b/>
+        <br>
+        <input class="form-input" placeholder="Enter company name" type="text" name="Company" id="company" />
+        <br>
+        <b>Deal Coordinates<b/>
+        <br>
+        <input class="form-input" placeholder="Enter coordinates" type="text" name="coordinatesbox" id="coordinates" />
+        <br>
+        <b>Deal Description<b/>
+        <br>
+        <input class="form-input" placeholder="Enter description" type="text" name="dealdescriptionbox" id="description" />
+        <br>
+        <b>Price<b/>
+        <br>
+        <input class="form-input" placeholder="Enter price" type="text" name="originalpricebox" id="price" />
+        <br>
+        <b>Duration<b/>
+        <br>
+        <input class="form-input" placeholder="Enter duration" type="text" name="durationbox" id="duration" />
+        <br>
+        <b>Amount of units<b/>
+        <br>
+        <input class="form-input" placeholder="Enter description" type="text" name="unitsbox" id="units" />
+        <br>
+        <button class="btn-login" onclick="publish(
+        '{target___id: Super special company ID, Data:{ ' +
+        'name:' + document.getElementById('company').value + ', ' +
+        'picture:' + '<<binary>>' + ', ' +
+        'coordinates:' + document.getElementById('coordinates').value + ', ' +
+        'description:' + document.getElementById('description').value + ', ' +
+        'price:' + document.getElementById('price').value + ', ' +
+        'units:' + document.getElementById('units').value + ', ' +
+        'duration:' + document.getElementById('duration').value + ' }, }',
+        'topic',2);">3. Send</button>
+        <br>
+        </font>
+        <div id="messages"></div>
+        <br><br>
         
-        <b>Disconnect from Broker<b/>
-        <button class="btn-login" onclick="client.disconnect();">(4. Disconnect)</button>
-        <br><br><br><br></font>
-        <div id="messages"></div> 
-        </form>
+        
 </div>
 </div>
 <footer>
         <div class="wrapper">
+           
             <div id="footer-info">
                 <p>Copyright 2016 GoGoDeals. All rights reserved.</p>
                 <p><a href="#">Terms of Service</a> | <a href="#">Privacy</a></p>
