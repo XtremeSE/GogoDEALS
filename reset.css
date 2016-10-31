@@ -485,22 +485,25 @@ input[type="text"], input[type="password"]{
 	color:#02b8dd;
 }
 /*...REGISTER*/
+	
 
 .reg-container{
-	width: 500px;
-	height: 550px;
+	width: 700px;
+	height: 1000px;
 	text-align: center;
 	background-color: rgba(62,83,104,0.2);
 	border-radius: 4px;
 	margin: 0 auto;
 	margin-top:50px;
+	overflow-x: auto;
 
 }
+
 
 .reg-container img{
 	width: auto; 
 	height: 120px;
-	margin-top: -60px;
+	margin-top: 60px;
 	margin-bottom: 30px;
 
 }

@@ -2,7 +2,7 @@
 <html>
 <head>  
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-       
+
     <link rel="stylesheet" type="text/css" href="style.css">    
 
     <link rel="stylesheet" type="text/css" href="reset.css">
@@ -14,9 +14,16 @@
     <title>Add Deal</title>
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
-        <title>HiveMQ MQTT Websocket Demo App</title>
-        <script type="text/javascript">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqFzoHdRxRZ3Hrv9jdT_uZbJxayyLUqgw&libraries=places"></script>
+    <script type="text/javascript">
+
+
+        var geocoder;
+        var autocomplete;
+        var latitudelongitude;
+        var binaryPicture;
+
  // Create a client with the Paho Api. set it to the correct broker ip, port and your "signature"
  var client = new Paho.MQTT.Client("176.10.136.208", 9001, "web" + Math.random());
  
@@ -42,23 +49,127 @@
          alert("Connection failed: " + message.errorMessage);
      }
  };
+
+
+
+ function initialize() {
+
+    geocoder = new google.maps.Geocoder();
+    autocomplete = new google.maps.places.Autocomplete(
+      /** @type {HTMLInputElement} */(document.getElementById('address')),
+      { types: ['geocode'],  componentRestrictions: {country: 'swe'} });
+    google.maps.event.addListener(autocomplete, 'place_changed', function() {
+    });
+}
+
+window.onload = function() {
+
+    var fileInput = document.getElementById('fileInput');
+    var fileDisplayArea = document.getElementById('fileDisplayArea');
+
+
+    fileInput.addEventListener('change', function(e) {
+        var file = fileInput.files[0];
+        var imageType = /image.*/;
+
+        if (file.type.match(imageType)) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                fileDisplayArea.innerHTML = "";
+
+                var img = new Image();
+                img.src = reader.result;
+                binaryPicture = reader.result;
+                alert(binaryPicture);
+
+
+                fileDisplayArea.appendChild(img);
+            }
+
+            reader.readAsDataURL(file); 
+        } else {
+            fileDisplayArea.innerHTML = "File not supported!"
+        }
+    });
+}
+
+
+function publishWithAddress() {
+    var check = 0;
+    var address = document.getElementById('address').value;
+    geocoder.geocode( { 'address': address}, function(results, status) {
+      if (status == 'OK') {
+        latitudelongitude = results[0].geometry.location;
+        check++;    
+
+        if (!isNaN(document.getElementById('duration').value) && document.getElementById('duration').value < 31 && document.getElementById('duration').value > 0) {
+            check++;
+        } else {
+            alert('Duration can only be between 1 and 31 and have to be written in numbers');
+        }
+
+        if (!isNaN(document.getElementById('units').value) && document.getElementById('units').value < 100 && document.getElementById('units').value > 0) {
+            check++;
+        } else {
+            alert('Units can only be between 1 and 100 and have to be written with numbers');
+        }
+
+        if (!isNaN(document.getElementById('price').value) && document.getElementById('price').value > 0) {
+            check++;
+        } else {
+            alert('Price have to be larger than zero and be written in numbers');
+        }
+
+        if (typeof document.getElementById('description').value === 'string') {
+            check++;
+        } else {
+            alert('Description have to be added in text');
+        }
+
+        if (typeof document.getElementById('company').value === 'string') {
+            check++;
+        } else {
+            alert('Compan name have to be added in text');
+        }
+
+        if (check=== 6) {
+            alert('Deal added!');
+            publish(
+                '{target___id: Super special company ID, Data:{ ' +
+                'name:' + document.getElementById('company').value + '; ' +
+                'picture:' + binaryPicture + '; ' +
+                'coordinates:' + latitudelongitude + '; ' +
+                'description:' + document.getElementById('description').value + '; ' +
+                'price:' + document.getElementById('price').value + '; ' +
+                'units:' + document.getElementById('units').value + '; ' +
+                'duration:' + document.getElementById('duration').value + ' }; }',
+                'topic',2);
+        }
+
+    } else {
+        alert('Geocode was not successful for the following reason: ' + status);
+    }
+});
+
+}
+
  // This is the publish method that takes the payload, topic and quality of service.
  // It then creates a paho message with the values given and then sends it.
  var publish = function (payload, topic, qos) {
-     var message = new Paho.MQTT.Message(payload);
-     message.destinationName = topic;
-     message.qos = qos;
-     client.send(message);
-     //client.disconnect();
- };
- client.connect(options);
+   var message = new Paho.MQTT.Message(payload);
+   message.destinationName = topic;
+   message.qos = qos;
+   client.send(message);
+            //client.disconnect(); 
+        };
 
- 
-        </script>
+        client.connect(options);
+    </script>
 
 </head>
 
-<body>
+<body onload="initialize()">
     <header>    
         <div class="wrapper">
             <h1>GoGo Deals<span class="color"></span></h1>
@@ -72,72 +183,66 @@
             </nav>
         </div>
     </header>
-<html>
+    <html>
 
-<div id ="login" > 
-<div class="reg-container">
-        <font size="5" color ="white">
-        <b>Publish deal</b>
-        </font>
-        <br>
-        <br>
-        <font size="3" color ="white">
-        <b>Company name<b/>
-        <br>
-        <input class="form-input" placeholder="Enter company name" type="text" name="Company" id="company" />
-        <br>
-        <b>Deal Coordinates<b/>
-        <br>
-        <input class="form-input" placeholder="Enter coordinates" type="text" name="coordinatesbox" id="coordinates" />
-        <br>
-        <b>Deal Description<b/>
-        <br>
-        <input class="form-input" placeholder="Enter description" type="text" name="dealdescriptionbox" id="description" />
-        <br>
-        <b>Price<b/>
-        <br>
-        <input class="form-input" placeholder="Enter price" type="text" name="originalpricebox" id="price" />
-        <br>
-        <b>Duration<b/>
-        <br>
-        <input class="form-input" placeholder="Enter duration" type="text" name="durationbox" id="duration" />
-        <br>
-        <b>Amount of units<b/>
-        <br>
-        <input class="form-input" placeholder="Enter description" type="text" name="unitsbox" id="units" />
-        <br>
-        <button class="btn-login" onclick="publish(
-        '{target___id: Super special company ID, Data:{ ' +
-        'name:' + document.getElementById('company').value + ', ' +
-        'picture:' + '<<binary>>' + ', ' +
-        'coordinates:' + document.getElementById('coordinates').value + ', ' +
-        'description:' + document.getElementById('description').value + ', ' +
-        'price:' + document.getElementById('price').value + ', ' +
-        'units:' + document.getElementById('units').value + ', ' +
-        'duration:' + document.getElementById('duration').value + ' }, }',
-        'topic',2);">3. Send</button>
-        <br>
-        </font>
-        <div id="messages"></div>
-        <br><br>
-</div>
-</div>
-<footer>
-        <div class="wrapper">
-           
-            <div id="footer-info">
-                <p>Copyright 2016 GoGoDeals. All rights reserved.</p>
-                <p><a href="#">Terms of Service</a> | <a href="#">Privacy</a></p>
-            </div>
-            <div id="footer-links">
-                <ul>
-                    <li><h5>Company</h5></li>
-                    <li><a href="#">About us</a></li>
-                    <li><a href="#">Meet The Team</a></li>
-                    <li><a href="#">What We Do</a></li>
-                    <li><a href="#">Careers</a></li>
-                </ul>
-            </div>
-            <div class="clear"></div>
-        </div>
-    </footer>
+
+    <div id ="login" > 
+        <div class="reg-container">
+            <font size="3" color ="white">
+                <b>Company name<b/>
+                    <br>
+                    <input class="form-input" placeholder="Company name" type="text" name="Company" id="company" />
+                    <br>
+                    <b>Deal Adress<b/>
+                        <br>
+                        <input class="form-input" placeholder="Adress" onFocus="geolocate()" type="text" name="adressbox" id="address" />
+                        <br>
+                        <b>Deal Description<b/>
+                            <br>
+                            <input class="form-input" placeholder="Description" type="text" name="dealdescriptionbox" id="description" />
+                            <br>
+                            <b>Price<b/>
+                                <br>
+                                <input class="form-input" placeholder="Price" type="text" name="originalpricebox" id="price" />
+                                <br>
+                                <b>Duration<b/>
+                                    <br>
+                                    <input class="form-input" placeholder="Duration" type="text" name="durationbox" id="duration" />
+                                    <br>
+                                    <b>Amount of units<b/>
+                                        <br>
+                                        <input class="form-input" placeholder="Description" type="text" name="unitsbox" id="units" />
+                                        <br>
+                                        <button class="btn-login" onclick="publishWithAddress()">Send</button>
+                                        <br>
+                                        <input type="file" id="fileInput">
+                                        <br>
+                                    </font>
+
+                                    <br>
+                                    <div class="img" id="fileDisplayArea"></div>
+                                </div>
+                            </div>
+                            <div id="messages"></div>
+
+
+
+                            <footer>
+                                <div class="wrapper">
+
+                                    <div id="footer-info">
+                                        <p>Copyright 2016 GoGoDeals. All rights reserved.</p>
+                                        <p><a href="#">Terms of Service</a> | <a href="#">Privacy</a></p>
+                                    </div>
+                                    <div id="footer-links">
+                                        <ul>
+                                            <li><h5>Company</h5></li>
+                                            <li><a href="#">About us</a></li>
+                                            <li><a href="#">Meet The Team</a></li>
+                                            <li><a href="#">What We Do</a></li>
+                                            <li><a href="#">Careers</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                            </footer>
