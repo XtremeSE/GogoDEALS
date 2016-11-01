@@ -62,7 +62,7 @@
     });
 }
 
-window.onload = function() {
+function imageHandler(){
 
     var fileInput = document.getElementById('fileInput');
     var fileDisplayArea = document.getElementById('fileDisplayArea');
@@ -246,7 +246,7 @@ if (check === 6) {
                                         <b id="pic">Choose picture<b/>
                                             <br>
                                             <br>
-                                            <input type="file" id="fileInput">
+                                            <input type="file" onclick="imageHandler()" id="fileInput">
                                             <br>
                                         </font>
 
