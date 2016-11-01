@@ -81,8 +81,6 @@ window.onload = function() {
                 var img = new Image();
                 img.src = reader.result;
                 binaryPicture = reader.result;
-                alert(binaryPicture);
-
 
                 fileDisplayArea.appendChild(img);
             }
@@ -95,74 +93,115 @@ window.onload = function() {
 }
 
 
-function publishWithAddress() {
-    var check = 0;
-    var address = document.getElementById('address').value;
-    geocoder.geocode( { 'address': address}, function(results, status) {
-      if (status == 'OK') {
-        latitudelongitude = results[0].geometry.location;
-        check++;    
-
-        if (!isNaN(document.getElementById('duration').value) && document.getElementById('duration').value < 31 && document.getElementById('duration').value > 0) {
-            check++;
-        } else {
-            alert('Duration can only be between 1 and 31 and have to be written in numbers');
-        }
-
-        if (!isNaN(document.getElementById('units').value) && document.getElementById('units').value < 100 && document.getElementById('units').value > 0) {
-            check++;
-        } else {
-            alert('Units can only be between 1 and 100 and have to be written with numbers');
-        }
-
-        if (!isNaN(document.getElementById('price').value) && document.getElementById('price').value > 0) {
-            check++;
-        } else {
-            alert('Price have to be larger than zero and be written in numbers');
-        }
-
-        if (typeof document.getElementById('description').value === 'string') {
-            check++;
-        } else {
-            alert('Description have to be added in text');
-        }
-
-        if (typeof document.getElementById('company').value === 'string') {
-            check++;
-        } else {
-            alert('Compan name have to be added in text');
-        }
-
-        if (check=== 6) {
-            alert('Deal added!');
-            publish(
-                '{target___id: Super special company ID, Data:{ ' +
-                'name:' + document.getElementById('company').value + '; ' +
-                'picture:' + binaryPicture + '; ' +
-                'coordinates:' + latitudelongitude + '; ' +
-                'description:' + document.getElementById('description').value + '; ' +
-                'price:' + document.getElementById('price').value + '; ' +
-                'units:' + document.getElementById('units').value + '; ' +
-                'duration:' + document.getElementById('duration').value + ' }; }',
-                'topic',2);
-        }
-
-    } else {
-        alert('Geocode was not successful for the following reason: ' + status);
-    }
-});
-
-}
-
- // This is the publish method that takes the payload, topic and quality of service.
- // It then creates a paho message with the values given and then sends it.
- var publish = function (payload, topic, qos) {
+var publish = function (payload, topic, qos) {
    var message = new Paho.MQTT.Message(payload);
    message.destinationName = topic;
    message.qos = qos;
    client.send(message);
             //client.disconnect(); 
         };
+
+function publishWithAddress() {
+    var check = 0;
+    var address = document.getElementById('address');
+    var units = document.getElementById('units');
+    var price = document.getElementById('price');
+    var description = document.getElementById('description');
+    var duration = document.getElementById('duration');
+    var company = document.getElementById('company');
+
+    geocoder.geocode( { 'address': address.value}, function(results, status) {
+      if (status == 'OK') {
+        latitudelongitude = results[0].geometry.location;
+        check++;
+        address.style.border='transparent';
+
+        if (!isNaN(duration.value) && duration.value < 31 && duration.value > 0) {
+            check++;
+            duration.style.border='transparent';
+
+        } else {
+            duration.style.border='solid';
+            duration.style.borderColor = "red";
+            duration.placeholder = 'Duration must border 1 to 31';
+            duration.style.size = '3px';
+        }
+
+        if (!isNaN(units.value) && units.value < 100 && units.value > 0) {
+            check++;
+            units.style.border='transparent';
+
+        } else {
+           units.style.border='solid';
+           units.style.borderColor = "red";
+           units.placeholder = 'Amont of deals must be 1 to 100';
+       }
+
+       if (!isNaN(price.value) && price.value > 0) {
+        check++;
+        price.style.border='transparent';
+
+    } else {
+        price.style.border='solid';
+        price.style.borderColor = "red";
+        price.placeholder = 'Price must be more than 0';
+    }
+
+    if (!description.value == "") {
+        check++;
+        description.style.border='transparent';
+
+    } else {
+       description.style.border='solid';
+       description.style.borderColor = "red";
+       description.placeholder = 'Description cant be empty';
+   }
+
+   if (!company.value == "") {
+    check++;
+    company.style.border='transparent';
+
+} else {
+ company.style.border='solid';
+ company.style.borderColor = "red";
+ company.placeholder = 'Field cant be empty'; 
+}
+
+//if (binaryPicture) {
+//    check++;
+//} else {
+//    alert('You need to add a picture');
+//}
+
+if (check === 6) {
+    alert('Deal added!');
+    publish(
+        '{target___id: Super special company ID, Data:{ ' +
+        'name:' + document.getElementById('company').value + '; ' +
+        'picture:' + binaryPicture + '; ' +
+        'coordinates:' + latitudelongitude + '; ' +
+        'description:' + document.getElementById('description').value + '; ' +
+        'price:' + document.getElementById('price').value + '; ' +
+        'units:' + document.getElementById('units').value + '; ' +
+        'duration:' + document.getElementById('duration').value + ' }; }',
+        'topic',2);
+    //location.reload();
+}
+
+} else {
+     document.getElementById('address').style.border='solid';
+     document.getElementById('address').style.borderColor = "red";
+    document.getElementById('address').placeholder = 'Incorrect adress';  
+}
+
+});
+}
+
+
+
+ // This is the publish method that takes the payload, topic and quality of service.
+ // It then creates a paho message with the values given and then sends it.
+ 
 
         client.connect(options);
     </script>
@@ -189,60 +228,51 @@ function publishWithAddress() {
     <div id ="login" > 
         <div class="reg-container">
             <font size="3" color ="white">
-                <b>Company name<b/>
                     <br>
                     <input class="form-input" placeholder="Company name" type="text" name="Company" id="company" />
-                    <br>
-                    <b>Deal Adress<b/>
                         <br>
                         <input class="form-input" placeholder="Adress" onFocus="geolocate()" type="text" name="adressbox" id="address" />
                         <br>
-                        <b>Deal Description<b/>
+                            <input class="form-input" placeholder="Description" type="text"  name="dealdescriptionbox" id="description" />
                             <br>
-                            <input class="form-input" placeholder="Description" type="text" name="dealdescriptionbox" id="description" />
-                            <br>
-                            <b>Price<b/>
+                                <input class="form-input" placeholder="Price in Kr" type="text" name="originalpricebox" id="price" />
                                 <br>
-                                <input class="form-input" placeholder="Price" type="text" name="originalpricebox" id="price" />
-                                <br>
-                                <b>Duration<b/>
+                                    <input class="form-input" placeholder="Duration in days" type="text" name="durationbox" id="duration" />
                                     <br>
-                                    <input class="form-input" placeholder="Duration" type="text" name="durationbox" id="duration" />
-                                    <br>
-                                    <b>Amount of units<b/>
-                                        <br>
-                                        <input class="form-input" placeholder="Description" type="text" name="unitsbox" id="units" />
+                                        <input class="form-input" placeholder="Amount of deals" type="text" name="unitsbox" id="units" />
                                         <br>
                                         <button class="btn-login" onclick="publishWithAddress()">Send</button>
                                         <br>
-                                        <input type="file" id="fileInput">
+                                        <b id="pic">Choose picture<b/>
+                                            <br>
+                                            <br>
+                                            <input type="file" id="fileInput">
+                                            <br>
+                                        </font>
+
                                         <br>
-                                    </font>
-
-                                    <br>
-                                    <div class="img" id="fileDisplayArea"></div>
-                                </div>
-                            </div>
-                            <div id="messages"></div>
-
-
-
-                            <footer>
-                                <div class="wrapper">
-
-                                    <div id="footer-info">
-                                        <p>Copyright 2016 GoGoDeals. All rights reserved.</p>
-                                        <p><a href="#">Terms of Service</a> | <a href="#">Privacy</a></p>
+                                        <div class="img" id="fileDisplayArea"></div>
                                     </div>
-                                    <div id="footer-links">
-                                        <ul>
-                                            <li><h5>Company</h5></li>
-                                            <li><a href="#">About us</a></li>
-                                            <li><a href="#">Meet The Team</a></li>
-                                            <li><a href="#">What We Do</a></li>
-                                            <li><a href="#">Careers</a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="clear"></div>
                                 </div>
-                            </footer>
+
+
+
+                                <footer>
+                                    <div class="wrapper">
+
+                                        <div id="footer-info">
+                                            <p>Copyright 2016 GoGoDeals. All rights reserved.</p>
+                                            <p><a href="#">Terms of Service</a> | <a href="#">Privacy</a></p>
+                                        </div>
+                                        <div id="footer-links">
+                                            <ul>
+                                                <li><h5>Company</h5></li>
+                                                <li><a href="#">About us</a></li>
+                                                <li><a href="#">Meet The Team</a></li>
+                                                <li><a href="#">What We Do</a></li>
+                                                <li><a href="#">Careers</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="clear"></div>
+                                    </div>
+                                </footer>

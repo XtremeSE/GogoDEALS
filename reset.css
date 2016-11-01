@@ -488,8 +488,8 @@ input[type="text"], input[type="password"]{
 	
 
 .reg-container{
-	width: 700px;
-	height: 1000px;
+	width: 600px;
+	height: 850px;
 	text-align: center;
 	background-color: rgba(62,83,104,0.2);
 	border-radius: 4px;
