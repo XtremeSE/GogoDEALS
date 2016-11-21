@@ -11,6 +11,91 @@
 
 	    <link href='http://fonts.googleapis.com/css?family=Crete+Round' rel='stylesheet' type='text/css'>
 
+      <script type="text/javascript">
+
+
+       
+        
+ // Create a client with the Paho Api. set it to the correct broker ip, port and your "signature"
+ var client = new Paho.MQTT.Client("176.10.136.208", 9001, "web" + Math.random());
+ 
+ //Gets  called if the websocket/mqtt connection gets disconnected for any reason
+ client.onConnectionLost = function (responseObject) {
+     //Messages if the connection is lost
+     alert("connection lost: " + responseObject.errorMessage);
+ };
+ //When a message is recieved from the topic you are subscribed to it gets printed.
+ client.onMessageArrived = function (message) {
+     //Do something with the push message you received
+
+     //this will need to be changed
+     $('#messages').append('<span>Topic: ' + message.destinationName + '  | ' + message.payloadString + '</span><br/>');
+ };
+ //Theese are the options for the connection
+ var options = {
+     timeout: 3,
+     //Messages when the connection is established
+     onSuccess: function () {
+         client.subscribe('deal/gogodeals/database/clients', {qos: 2});
+     },
+     //Messages if the connection was a failure
+     onFailure: function (message) {
+         alert("Connection failed: " + message.errorMessage);
+     }
+ };
+
+var publish = function (payload, topic, qos) {
+   var message = new Paho.MQTT.Message(payload);
+   message.destinationName = topic;
+   message.qos = qos;
+   client.send(message);
+            //client.disconnect(); 
+        };
+
+ function publishStuff() {
+    var check = 0;
+    var  usernamec= document.getElementById('username');
+    var password = document.getElementById('password');
+    
+
+    if (!username.value == "") {
+        check++;
+        username.style.border='transparent';
+
+    } else {
+       username.style.border='solid';
+       username.style.borderColor = "red";
+       username.placeholder = 'Enter a Username';
+    }
+
+    if (!password.value == "") {
+    password.style.border='transparent';
+    check++;
+
+    } else {
+      password.style.border='solid';
+      password.style.borderColor = "red";
+      password.placeholder = 'Enter a Password'; 
+    }
+
+    if (check === 2) {
+      alert('Loggin you in!');
+      window.location="home.html";
+      publish(
+        '{"id": Super special company ID, Data:{ ' +
+        'username:' + document.getElementById('username').value + '; ' +
+        'password:' + document.getElementById('password').value + ' }; }',
+        'deal/gogodeals/client/info',2);  
+
+       
+    }
+
+
+}
+client.connect(options);
+
+
+</script>
 		<title>Go'on Head and Login Shuga</title>
 	</head>
 
@@ -21,129 +106,12 @@
 				<nav>
 					<ul>
 						<li><a href="index.html">Home</a></li>
-						<li><a href="#">Deals</a></li>
-						<li><a href="#">Contact</a></li>
+						<!--<li><a href="#">Deals</a></li>
+						<li><a href="#">Contact</a></li>-->
 					</ul>
 				</nav>
 			</div>
 		</header>
-
-		<div id="primary-content">
-    	<div class="wrapper">
-    		
-        <article>
-          <h6>
-            <script>
- //check if the browser suppirts the filechooser API
-        if (window.File && window.FileReader && window.FileList && window.Blob) {
-  // Great success! All the File APIs are supported.
-} else {
-  alert('The File APIs are not fully supported in this browser.');
-} </script>
-<style>
-  #byte_content {
-    margin: 5px 0;
-    max-height: 100px;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-  #byte_range { margin-top: 5px; }
-</style>
-
-<input type="file" id="files" name="file" /> Read bytes: 
-<span class="readBytesButtons">
-
-  <button>Entire file</button>
-</span>
-<div id="byte_range"></div>
-<div id="byte_content"></div>
-
-<script>
-  function readBlob(opt_startByte, opt_stopByte) {
-
-    var files = document.getElementById('files').files;
-    if (!files.length) {
-      alert('Please select a file!');
-      return;
-    }
-    //specifies the byte stream that will be shown
-    var file = files[0];
-    var start = parseInt(opt_startByte) || 0;
-    var stop = parseInt(opt_stopByte) || file.size - 1;
-
-    var reader = new FileReader();
-
-    // If we use onloadend, we need to check the readyState.
-    reader.onloadend = function(evt) {
-      if (evt.target.readyState == FileReader.DONE) { // DONE == 2
-        document.getElementById('byte_content').textContent = evt.target.result;
-        document.getElementById('byte_range').textContent = 
-            ['Read bytes: ', start + 1, ' - ', stop + 1,
-             ' of ', file.size, ' byte file'].join('');
-      }
-    };
-
-    var blob = file.slice(start, stop + 1);
-    reader.readAsBinaryString(blob);
-  }
-  
-  document.querySelector('.readBytesButtons').addEventListener('click', function(evt) {
-    if (evt.target.tagName.toLowerCase() == 'button') {
-      var startByte = evt.target.getAttribute('data-startbyte');
-      var endByte = evt.target.getAttribute('data-endbyte');
-      readBlob(startByte, endByte);
-    }
-  }, false);
-</script>
-
-<!-- This code alows you to get a local file/picture and then displays it!-->
-
-<style>
-  .thumb {
-    height: 75px;
-    border: 1px solid #000;
-    margin: 10px 5px 0 0;
-  }
-</style>
-
-<input type="file" id="files" name="files[]" multiple />
-<output id="list"></output>
-
-<script>
-  function handleFileSelect(evt) {
-    var files = evt.target.files; // FileList object
-
-    // Loop through the FileList and render image files as thumbnails.
-    for (var i = 0, f; f = files[i]; i++) {
-
-      // Only process image files.
-      if (!f.type.match('image.*')) {
-        continue;
-      }
-
-      var reader = new FileReader();
-
-      // Closure to capture the file information.
-      reader.onload = (function(theFile) {
-        return function(e) {
-          // Render thumbnail.
-          var span = document.createElement('span');
-          span.innerHTML = ['<img class="thumb" src="', e.target.result,
-                            '" title="', escape(theFile.name), '"/>'].join('');
-          document.getElementById('list').insertBefore(span, null);
-        };
-      })(f);
-
-      // Read in the image file as a data URL.
-      reader.readAsDataURL(f);
-    }
-  }
-
-  document.getElementById('files').addEventListener('change', handleFileSelect, false);
-</script>
-            </h6></article>
-    	</div>
-    </div>
    <div id ="login">
     <div class="container">
     	<!--Just need to inset a pic, I want to see if we can use their facebook profile pic-->
@@ -151,13 +119,12 @@
       <img src="images/features-icon-1.png" alt="Smiley face" height="120" width="auto">
     	<form>
     		<div class="form-input">
-    			<input type="text" name="username"
-    			placeholder="Enter Username">
+    			<input type="text" name="username" id="username" placeholder="Enter Username">
     		</div>
     		<div class="form-input">
-    			<input type="password" name="password" placeholder="Enter Password">
+    			<input type="password" name="password" id="password" placeholder="Enter Password">
     		</div><br>
-    		<input type="submit" name="submit" value="LOGIN" class="btn-login">
+    		<a class="btn-login" onclick="publishStuff()">Login </a>
     		<a href="#" class="fp">Forgot Your Password?</a><br><br>
         <a href="register.html" class="ca">Create New Account</a>
     	</form>
@@ -168,7 +135,7 @@
     	<div class="wrapper">
     		<h3>Not a Member?</h3>
     		<p>No, problem! Sign-up today to access exclusive new food and drink selections just for you on Andra Lång this weekend.</p>
-    		<a href="#" class="button-2">Check it out</a>
+    		<a href="register.html" class="button-2">Check it out</a>
     	</div>
     </div>
 

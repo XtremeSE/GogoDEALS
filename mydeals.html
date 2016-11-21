@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>  
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <link rel="stylesheet" type="text/css" href="style.css">    
+
+    <link rel="stylesheet" type="text/css" href="reset.css">
+
+    <link rel="stylesheet" type="text/css" href="font-awesome-4.6.3/css/font-awesome.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.js"></script>
+    <script src="script.js"></script>
+    <link rel="stylesheet" href="reset.css">
+
+    <link href='http://fonts.googleapis.com/css?family=Crete+Round' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
+    <title>Welcome Home</title>
+    
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqFzoHdRxRZ3Hrv9jdT_uZbJxayyLUqgw&libraries=places"></script>
+    <script type="text/javascript">
+
+
+        var geocoder;
+        var autocomplete;
+        var latitudelongitude;
+        var binaryPicture;
+
+ // Create a client with the Paho Api. set it to the correct broker ip, port and your "signature"
+ var client = new Paho.MQTT.Client("176.10.136.208", 9001, "web" + Math.random());
+ 
+ //Gets  called if the websocket/mqtt connection gets disconnected for any reason
+ client.onConnectionLost = function (responseObject) {
+     //Messages if the connection is lost
+     alert("connection lost: " + responseObject.errorMessage);
+ };
+ //When a message is recieved from the topic you are subscribed to it gets printed.
+ client.onMessageArrived = function (message) {
+     //Do something with the push message you received
+     $('#messages').append('<span>Topic: ' + message.destinationName + '  | ' + message.payloadString + '</span><br/>');
+ };
+ //These are the options for the connection
+ var options = {
+     timeout: 3,
+     //Messages when the connection is established
+     onSuccess: function () {
+         client.subscribe('topic', {qos: 2});
+     },
+     //Messages if the connection was a failure
+     onFailure: function (message) {
+         alert("Connection failed: " + message.errorMessage);
+     }
+ };
+
+ //function clearData(){
+    
+   // var address = document.getElementById('address');
+   // var units = document.getElementById('units');
+   // var price = document.getElementById('price');
+   // var description = document.getElementById('description');
+   // var duration = document.getElementById('duration');
+   // var company = document.getElementById('company');
+
+    //company.placeholder == '';
+    //duration.placeholder =='';
+    //description.placeholder =='';
+    //price.placeholder ==" ";
+    //units.placeholder ==' ';
+    //address.placeholder =="";
+
+ //}-->
+
+ function initialize() {
+
+    geocoder = new google.maps.Geocoder();
+    autocomplete = new google.maps.places.Autocomplete(
+      /** @type {HTMLInputElement} */(document.getElementById('address')),
+      { types: ['geocode'],  componentRestrictions: {country: 'swe'} });
+    google.maps.event.addListener(autocomplete, 'place_changed', function() {
+    });
+}
+
+function imageHandler(){
+
+    var fileInput = document.getElementById('fileInput');
+    var fileDisplayArea = document.getElementById('fileDisplayArea');
+
+
+    fileInput.addEventListener('change', function(e) {
+        var file = fileInput.files[0];
+        var imageType = /image.*/;
+
+        if (file.type.match(imageType)) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                fileDisplayArea.innerHTML = "";
+
+                var img = new Image();
+                img.src = reader.result;
+                binaryPicture = reader.result;
+
+                fileDisplayArea.appendChild(img);
+            }
+
+            reader.readAsDataURL(file); 
+        } else {
+            fileDisplayArea.innerHTML = "File not supported!"
+        }
+    });
+}
+
+
+var publish = function (payload, topic, qos) {
+   var message = new Paho.MQTT.Message(payload);
+   message.destinationName = topic;
+   message.qos = qos;
+   client.send(message);
+            //client.disconnect(); 
+        };
+
+function publishWithAddress() {
+    var check = 0;
+    var address = document.getElementById('address');
+    var units = document.getElementById('units');
+    var price = document.getElementById('price');
+    var description = document.getElementById('description');
+    var duration = document.getElementById('duration');
+    var company = document.getElementById('company');
+
+    geocoder.geocode( { 'address': address.value}, function(results, status) {
+      if (status == 'OK') {
+        latitudelongitude = results[0].geometry.location;
+        check++;
+        address.style.border='transparent';
+
+        if (!isNaN(duration.value) && duration.value < 31 && duration.value > 0) {
+            check++;
+            duration.style.border='transparent';
+
+        } else {
+            duration.style.border='solid';
+            duration.style.borderColor = "red";
+            duration.placeholder = 'Duration must border 1 to 31';
+            duration.style.size = '3px';
+        }
+
+        if (!isNaN(units.value) && units.value < 100 && units.value > 0) {
+            check++;
+            units.style.border='transparent';
+
+        } else {
+           units.style.border='solid';
+           units.style.borderColor = "red";
+           units.placeholder = 'Amont of deals must be 1 to 100';
+       }
+
+       if (!isNaN(price.value) && price.value > 0) {
+        check++;
+        price.style.border='transparent';
+
+    } else {
+        price.style.border='solid';
+        price.style.borderColor = "red";
+        price.placeholder = 'Price must be more than 0';
+    }
+
+    if (!description.value == "") {
+        check++;
+        description.style.border='transparent';
+
+    } else {
+       description.style.border='solid';
+       description.style.borderColor = "red";
+       description.placeholder = 'Description cant be empty';
+   }
+
+   if (!company.value == "") {
+    check++;
+    company.style.border='transparent';
+
+} else {
+ company.style.border='solid';
+ company.style.borderColor = "red";
+ company.placeholder = 'Field cant be empty'; 
+}
+
+//if (binaryPicture) {
+//    check++;
+//} else {
+//    alert('You need to add a picture');
+//}
+
+if (check === 6) {
+    alert('Deal added!');
+    publish(
+        '{target___id: Super special company ID, Data:{ ' +
+        'name:' + document.getElementById('company').value + '; ' +
+        'picture:' + binaryPicture + '; ' +
+        'coordinates:' + latitudelongitude + '; ' +
+        'description:' + document.getElementById('description').value + '; ' +
+        'price:' + document.getElementById('price').value + '; ' +
+        'units:' + document.getElementById('units').value + '; ' +
+        'duration:' + document.getElementById('duration').value + ' }; }',
+        'topic',2);
+    //location.reload();
+    //clearData();
+}
+
+} else {
+     document.getElementById('address').style.border='solid';
+     document.getElementById('address').style.borderColor = "red";
+    document.getElementById('address').placeholder = 'Incorrect adress';  
+}
+
+});
+}
+
+
+
+ // This is the publish method that takes the payload, topic and quality of service.
+ // It then creates a paho message with the values given and then sends it.
+ 
+
+        client.connect(options);
+
+//This is for the Hamburger thing when it does the cool hamber-to-X-thing
+//#MyDescriptionsTho
+//#SoDesctiptive
+//#OnTheDescrip
+$(document).ready(function() {
+  var $toggleButton = $('.toggle-button');
+  $toggleButton.on('click', function() {
+    $(this).toggleClass('button-open');
+  });
+}); 
+
+//This is to make the menu actually pop out.
+$(document).ready(function() {
+    var $toggleButton = $('.toggle-button'),
+        $menuWrap = $('.menu-wrap');
+
+    $toggleButton.click(function() {
+        $menuWrap.toggleClass('menu-show');
+   });
+});     
+
+ 
+
+//This is for the sub-Menu Items
+$(document).ready(function() {
+    var $sidebarArrow = $('.sidebar-menu-arrow'),
+         $deals = $(document.getElementById('deals')),
+          $submenu = $(document.getElementById('submenu'));
+    $sidebarArrow.click(function() {
+        $(this).next().slideToggle(300);
+    });
+    $deals.click(function() {
+        $submenu.slideToggle();
+    });
+
+    //this doesn't work but it's supposed to exit the menu if the 
+    //menu is open but you click on a part of the page that is not the menu.
+     if (toggleClass('menu-show')){
+      document.click(function(){
+    $(this).toggleClass('button-open');
+    });}
+});
+ 
+
+
+        </script>
+    </head>
+
+
+<body onload="initialize()">
+    <!--This is for the cool menu button-->
+    <span class="toggle-button">
+     <div class="menu-bar menu-bar-top"></div>
+     <div class="menu-bar menu-bar-middle"></div>
+     <div class="menu-bar menu-bar-bottom"></div>
+</span>
+    <header>    
+        <div class="wrapper">
+            <h1>GoGo Deals<span class="color"></span></h1>
+            <nav>
+            
+                <ul>
+                    <li><a href="index.html">Logout</a></li>
+                    <!--<li><a href="#">Deals</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="">Menu</li>-->
+                    
+                </ul>
+            </nav>
+        </div>
+
+    </header>
+
+
+<!--This is for the menu that will pop out-->
+<div class="menu-wrap">
+    <div class="menu-sidebar">
+        <ul class="menu">
+        <br><br><br><br><br><br>
+            <li><a href="home.html">Home</a></li>
+            <!--<li><a href="profile.html">My Profile</a></li>-->
+            <li class="menu-item-has-children"><a href="#" id="deals">Deals</a>
+                <span class="sidebar-menu-arrow"></span>
+                <ul id="submenu" class="sub-menu">
+                    <li><a href="demo.html">Create New Deal</a></li>
+                    <li><a href="mydeals.html">View Current Deals</a></li>
+                    <li><a href="predeals.html">View Previous Deals</a></li>
+                </ul>
+            </li>
+            <li><a href="editprofile.html">Edit Profile</a></li>
+            <li><a href="#">Help</a></li>
+        </ul>           
+    </div>
+</div>
+
+    <div id ="login" > 
+        <div class="reg-container">
+        <img src="images/features-icon-1.png" alt="Smiley face" height="120" width="auto">
+            <h3>
+                My Current deals:
+            </h3>
+        </div>
+    </div>
+
+
+
+                                <footer>
+                                    <div class="wrapper">
+
+                                        <div id="footer-info">
+                                            <p>Copyright 2016 GoGoDeals. All rights reserved.</p>
+                                            <p><a href="#">Terms of Service</a> | <a href="#">Privacy</a></p>
+                                        </div>
+                                        <div id="footer-links">
+                                            <ul>
+                                                <li><h5>Company</h5></li>
+                                                <li><a href="#">About us</a></li>
+                                                <li><a href="#">Meet The Team</a></li>
+                                                <li><a href="#">What We Do</a></li>
+                                                <li><a href="#">Careers</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="clear"></div>
+                                    </div>
+                                </footer>
+
+
+
+</html></body>
+<!--<script scr="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script scr="menu.js"></script>-->
+</html>
