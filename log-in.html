@@ -11,6 +11,91 @@
 
 	    <link href='http://fonts.googleapis.com/css?family=Crete+Round' rel='stylesheet' type='text/css'>
 
+      <script type="text/javascript">
+
+
+       
+        
+ // Create a client with the Paho Api. set it to the correct broker ip, port and your "signature"
+ var client = new Paho.MQTT.Client("176.10.136.208", 9001, "web" + Math.random());
+ 
+ //Gets  called if the websocket/mqtt connection gets disconnected for any reason
+ client.onConnectionLost = function (responseObject) {
+     //Messages if the connection is lost
+     alert("connection lost: " + responseObject.errorMessage);
+ };
+ //When a message is recieved from the topic you are subscribed to it gets printed.
+ client.onMessageArrived = function (message) {
+     //Do something with the push message you received
+
+     //this will need to be changed
+     $('#messages').append('<span>Topic: ' + message.destinationName + '  | ' + message.payloadString + '</span><br/>');
+ };
+ //Theese are the options for the connection
+ var options = {
+     timeout: 3,
+     //Messages when the connection is established
+     onSuccess: function () {
+         client.subscribe('deal/gogodeals/database/clients', {qos: 2});
+     },
+     //Messages if the connection was a failure
+     onFailure: function (message) {
+         alert("Connection failed: " + message.errorMessage);
+     }
+ };
+
+var publish = function (payload, topic, qos) {
+   var message = new Paho.MQTT.Message(payload);
+   message.destinationName = topic;
+   message.qos = qos;
+   client.send(message);
+            //client.disconnect(); 
+        };
+
+ function publishStuff() {
+    var check = 0;
+    var  usernamec= document.getElementById('username');
+    var password = document.getElementById('password');
+    
+
+    if (!username.value == "") {
+        check++;
+        username.style.border='transparent';
+
+    } else {
+       username.style.border='solid';
+       username.style.borderColor = "red";
+       username.placeholder = 'Enter a Username';
+    }
+
+    if (!password.value == "") {
+    password.style.border='transparent';
+    check++;
+
+    } else {
+      password.style.border='solid';
+      password.style.borderColor = "red";
+      password.placeholder = 'Enter a Password'; 
+    }
+
+    if (check === 2) {
+      alert('Loggin you in!');
+      window.location="home.html";
+      publish(
+        '{"id": Super special company ID, Data:{ ' +
+        'username:' + document.getElementById('username').value + '; ' +
+        'password:' + document.getElementById('password').value + ' }; }',
+        'deal/gogodeals/client/info',2);  
+
+       
+    }
+
+
+}
+client.connect(options);
+
+
+</script>
 		<title>Go'on Head and Login Shuga</title>
 	</head>
 
@@ -21,13 +106,12 @@
 				<nav>
 					<ul>
 						<li><a href="index.html">Home</a></li>
-						<li><a href="#">Deals</a></li>
-						<li><a href="#">Contact</a></li>
+						<!--<li><a href="#">Deals</a></li>
+						<li><a href="#">Contact</a></li>-->
 					</ul>
 				</nav>
 			</div>
 		</header>
-
    <div id ="login">
     <div class="container">
     	<!--Just need to inset a pic, I want to see if we can use their facebook profile pic-->
@@ -35,18 +119,26 @@
       <img src="images/features-icon-1.png" alt="Smiley face" height="120" width="auto">
     	<form>
     		<div class="form-input">
-    			<input type="text" name="username"
-    			placeholder="Enter Username">
+    			<input type="text" name="username" id="username" placeholder="Enter Username">
     		</div>
     		<div class="form-input">
-    			<input type="password" name="password" placeholder="Enter Password">
+    			<input type="password" name="password" id="password" placeholder="Enter Password">
     		</div><br>
-    		<input type="submit" name="submit" value="LOGIN" class="btn-login">
+    		<a class="btn-login" onclick="publishStuff()">Login </a>
     		<a href="#" class="fp">Forgot Your Password?</a><br><br>
         <a href="register.html" class="ca">Create New Account</a>
     	</form>
     </div>
     </div>
+    
+    <div id="cta">
+    	<div class="wrapper">
+    		<h3>Not a Member?</h3>
+    		<p>No, problem! Sign-up today to access exclusive new food and drink selections just for you on Andra Lång this weekend.</p>
+    		<a href="register.html" class="button-2">Check it out</a>
+    	</div>
+    </div>
+
     <footer>
     	<div class="wrapper">
     		<div id="footer-info">

@@ -199,14 +199,15 @@ function publishWithAddress() {
 if (check === 6) {
     alert('Deal added!');
     publish(
-        '{"target___id": "Super special company ID", "Data":{  ' + ' "name" :' + document.getElementById('company').value + '"; "' +
-        '"picture" :' + binaryPicture + '"; "' +
-        '"coordinates":' + latitudelongitude + '";" ' +
-        '"description":' + document.getElementById('description').value + '"; "' +
-        '"price":' + document.getElementById('price').value + '"; "' +
-        '"units":' + document.getElementById('units').value + '"; "' +
-        '"duration":' + document.getElementById('duration').value + '" }; }"',
-        '"topic"',2);
+        '{target___id: Super special company ID, Data:{ ' +
+        'name:' + document.getElementById('company').value + '; ' +
+        'picture:' + binaryPicture + '; ' +
+        'coordinates:' + latitudelongitude + '; ' +
+        'description:' + document.getElementById('description').value + '; ' +
+        'price:' + document.getElementById('price').value + '; ' +
+        'units:' + document.getElementById('units').value + '; ' +
+        'duration:' + document.getElementById('duration').value + ' }; }',
+        'topic',2);
     //location.reload();
     //clearData();
 }
@@ -272,6 +273,11 @@ $(document).ready(function() {
 });
  
 
+ function goHome(){
+  alert('Your profile has beed edited.')
+  //Send the shit to the broker
+  window.location="editprofile.html";
+ }
 
         </script>
     </head>
@@ -322,38 +328,41 @@ $(document).ready(function() {
         </ul>           
     </div>
 </div>
+<div id="login">
+    <div class="reg-container">
+      <!--Just need to inset a pic, I want to see if we can use their facebook profile pic-->
+       <img src="images/features-icon-1.png" alt="Smiley face" height="120" width="auto">
+      <form>
+        <div class="form-input">
+          <input type="text" name="username"
+          placeholder=" Enter Username">
+        </div>
+        <div class="form-input">
+          <input type="password" name="password" 
+          placeholder=" Enter Password">
+        </div>
+        <div class="form-input">
+          <input type="text" name="name" placeholder=" Name">
+        </div>
+        <div class="form-input">
+          <input type="text" name="business name" placeholder=" Company Name">
+        </div>
 
-    <div id ="login" > 
-        <div class="reg-container">
-        <img src="images/features-icon-1.png" alt="Smiley face" height="120" width="auto">
-            <!--<font size="3" color ="white">-->
-                    <br>
-                    <input class="form-input" placeholder="Company Name" type="text" name="Company" id="company" />
-                        <br>
-                    <input class="form-input" placeholder="Deal Location" onFocus="geolocate()" type="text" name="adressbox" id="address" />
-                        <br>
-                    <input class="form-input" placeholder="Deal Description" type="text"  name="dealdescriptionbox" id="description" />
-                        <br>
-                    <input class="form-input" placeholder="Price in SEK" type="text" name="originalpricebox" id="price" />
-                                <br>
-                    <input class="form-input" placeholder="Deal Duration in Days" type="text" name="durationbox" id="duration" />
-                                    <br>
-                    <input class="form-input" placeholder="Number of Deals" type="text" name="unitsbox" id="units" />
-                                        
-                                        <br>
-                                        Select an Image
-                                            <br>
-                                            
-                                            <input  type="file" onclick="imageHandler()" id="fileInput" class="btn-login"> 
-                                            <br>
+        <div class="form-input">
+          <input type="text" name="email" placeholder=" Email Address">
+        </div>
+        <div class="form-input">
+          <input type="text" name="country" placeholder=" Country">
+        
+        <a href="home.html" type="submit" name="submit" onclick="goHome()" class="btn-login">Edit</a>
 
-                                        <button class="btn-login" onclick="publishWithAddress()">Send</button>
-                                        </font>
+            
 
-                                        <br>
-                                        <div class="img" id="fileDisplayArea"></div>
-                                    </div>
-                                </div>
+        <!--<a href="#" class="fp">Forgot Your Password?</a><br><br>
+        <a href="register.html" class="ca">Create New Account</a>-->
+      </form>
+        </div>
+    </div>
 
 
 

@@ -55,6 +55,9 @@ body {
 	background-color: #fff;
 	color: #777;
 	font: normal 15px "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	margin: 0;
+	padding: 0;
+
 }
 
 p {
@@ -154,6 +157,7 @@ The navigation <ul> displays all of list items floating to the left.*/
 
 header {
 	height: 120px;
+	width: auto;
 }
 
 header h1 {
@@ -180,7 +184,7 @@ header nav ul li a {
 	text-transform: uppercase;
 	font-weight: bold;
 	display: block;
-	margin-right: 20px;
+	margin-right: 100px;
 }
 
 /*HAMBURGER MENU*/
@@ -194,6 +198,7 @@ header nav ul li a {
   height: 40px;
   padding: 4px;
   margin-top: 4px;
+  margin-left: 4px;
   transition: .25s;
   z-index: 15;
   transition:ease-in-out;
@@ -396,12 +401,13 @@ h3 defined in the global styles part of the CSS.*/
 
 #primary-content {
 	background-color: #f8fafa;
-	padding: 60px 0;
+	/*padding: 60px 0;*/
 	text-align: center;
 	width: auto;
 }
 
 #primary-content h3 {
+	position: center;
 	display: block;
 	margin: 0 auto 20px auto;
 	width: 400px;
@@ -409,11 +415,16 @@ h3 defined in the global styles part of the CSS.*/
 	padding: 0 0 20px 0;
 }
 
+#primary content h3 p{
+	width: auto;
+}
+
 
 
 #primary-content a img {
-	margin: 20px 0;
-	width: 100%;
+	
+	width: 100vh;
+	position: center;
 }
 
 
@@ -526,23 +537,24 @@ And use the same method to split the #footer-links section into
 footer {
 	padding: 60px 0;
 	background-color: #f8fafa;
+	max-width: 100%
 }
 
 #footer-info {
-	width: 380px;
+	width: auto;
 	float: left;
 	margin-top: 10px;
 }
 
 #footer-links {
-	width: 520px;
+	width: auto;
 	float: right;
 }
 
 #footer-links ul {
-	width: 150px;
+	width: auto;
 	float: right;
-	margin-left: 20px;
+	margin-right: 100px;
 }
 
 #footer-links ul li {
