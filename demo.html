@@ -190,8 +190,8 @@ var publish = function (payload, topic, qos) {
 if (check === 7) {
     alert('Deal added!');
     var message = 
-        '{"id": "e0e5e1ab-ad80-11e6-862e-080027e93e17", "data":{ ' +
-        '"client_id": "87654321-1011-M210-N210-123456123456", ' +
+        '{"id": "test", "data":{ ' +
+        '"client_id": "e0e5e1ab-ad80-11e6-862e-080027e93e17", ' +
         '"name": "' + document.getElementById('name').value + '", ' +
         '"price": ' + document.getElementById('price').value + ', ' +
         '"picture": "' + binaryPicture + '", ' +
@@ -200,7 +200,7 @@ if (check === 7) {
         '"latitude": ' + latitude + ', ' +
         '"filters": "' + document.getElementById('filter').value + '", ' +
         '"duration": "' + document.getElementById('duration').value + '", ' +
-        '"count": ' + document.getElementById('units').value + ',  }, }';
+        '"count": ' + document.getElementById('units').value + ' }, }';
         //var json = JSON.parse(message);
         publish(message,'deal/gogodeals/deal/new',2);
 }
