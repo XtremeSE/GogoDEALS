@@ -1,18 +1,7 @@
-<!DOCTYPE>
 <!DOCTYPE html>
 <html>
 <head>	
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	   
-	<link rel="stylesheet" type="text/css" href="style.css">
-
-	<link rel="stylesheet" type="text/css" href="reset.css">
-
-	<link rel="stylesheet" type="text/css" href="font-awesome-4.6.3/css/font-awesome.css">
-
-	<link href='http://fonts.googleapis.com/css?family=Crete+Round' rel='stylesheet' type='text/css'>
-
-     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
     <link rel="stylesheet" type="text/css" href="style.css">    
 
@@ -36,6 +25,12 @@
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqFzoHdRxRZ3Hrv9jdT_uZbJxayyLUqgw&libraries=places"></script>
     <script type="text/javascript">
 
+        var geocoder;
+        var autocomplete;
+        var latitude;
+        var longitude;
+        var latitudelongitude;
+
 // Create a client with the Paho Api. set it to the correct broker ip, port and your "signature"
  var client = new Paho.MQTT.Client("176.10.136.208", 9001, "web" + Math.random());
  
@@ -56,7 +51,7 @@
      timeout: 3,
      //Messages when the connection is established
      onSuccess: function () {
-         client.subscribe('deal/gogodeals/database/clients', {qos: 2});
+         client.subscribe('deal/gogodeals/client/new', {qos: 2});
      },
      //Messages if the connection was a failure
      onFailure: function (message) {
@@ -64,29 +59,63 @@
      }
  };
 
+  function initialize() {
+
+    geocoder = new google.maps.Geocoder();
+    autocomplete = new google.maps.places.Autocomplete(
+      /** @type {HTMLInputElement} */(document.getElementById('address')),
+      { types: ['geocode'],  componentRestrictions: {country: 'swe'} });
+    google.maps.event.addListener(autocomplete, 'place_changed', function() {
+    });
+}
+
 var publish = function (payload, topic, qos) {
    var message = new Paho.MQTT.Message(payload);
    message.destinationName = topic;
    message.qos = qos;
    client.send(message);
+   document.write("publish was reached");
             //client.disconnect(); 
         };
 
+ //function getJSessionId(){
+ //   var jsId = document.cookie.match(/JSESSIONID=[^;]+/);
+ //   if(jsId != null) {
+ //       if (jsId instanceof Array)
+ //           jsId = jsId[0].substring(11);
+ //       else
+ //           jsId = jsId.substring(11);
+ //   }
+ //   return jsId;
+ //}       
+
  function publishStuff() {
     var check = 0;
-    var  usernamec= document.getElementById('username');
+
+    var email = document.getElementById('email');
     var password = document.getElementById('password');
+    var buss_name = document.getElementById('buss_name');
+    var address = document.getElementById('address');
+    var session_id = /SESS\w*ID=([^;]+)/i.test(document.cookie) ? RegExp.$1 : false;
+
     
 
-    if (!username.value == "") {
-        check++;
-        username.style.border='transparent';
+  geocoder.geocode( { 'address': address.value}, function(results, status) {
+    if (status === 'OK') {
+    latitude = results[0].geometry.location.lat();
+    longitude = results[0].geometry.location.lng();
+    check++;
+    address.style.border='transparent';
 
-    } else {
-       username.style.border='solid';
-       username.style.borderColor = "red";
-       username.placeholder = 'Enter a Username';
-    }
+    if (!email.value == "") {
+      email.style.border='transparent';
+      check++;
+
+      } else {
+        email.style.border='solid';
+        email.style.borderColor = "red";
+        email.placeholder = 'Enter a Password'; 
+      }    
 
     if (!password.value == "") {
     password.style.border='transparent';
@@ -98,27 +127,40 @@ var publish = function (payload, topic, qos) {
       password.placeholder = 'Enter a Password'; 
     }
 
-    if (check === 6) {
-      alert('Loggin you in!');
-      window.location="home.html";
-      publish(
-        '{"id": Super special company ID, Data:{ ' +
-        'username:' + document.getElementById('username').value + '; ' +
-        'password:' + document.getElementById('password').value + ' }; }',
-        'deal/gogodeals/client/info',2);  
+    if (!buss_name.value == "") {
+    buss_name.style.border='transparent';
+    check++;
 
-       
+    } else {
+      buss_name.style.border='solid';
+      buss_name.style.borderColor = "red";
+      buss_name.placeholder = 'Enter a Password'; 
     }
 
+    if (check === 4) {
+    alert('Now you are registered, please log-in!');
+    //window.location="home.html";
+    var message =
+      '{"id":' + session_id + ', "data":{ ' +
+     '"name": "' + document.getElementById('buss_name').value + '", ' +
+      '"email": "' + document.getElementById('email').value + '", ' +
+      '"password": "' + document.getElementById('password').value + '", ' +
+      '"longitude": ' + longitude + ', ' +
+      '"latitude": ' + latitude + ' }, }';
+
+
+      publish(message,'deal/gogodeals/client/new',2);  
+  }
+    } else {
+      document.getElementById('address').style.border='solid';
+      document.getElementById('address').style.borderColor = "red";
+      document.getElementById('address').placeholder = 'Incorrect adress';  
+}
+
+});
 
 }
 
-function login(){
-    alert('You have been registered');
-    window.location="home.html";
-    //you will have to make publish stuff her publish the correct data
-    publishstuff();
-}
 
 
 client.connect(options);
@@ -126,10 +168,10 @@ client.connect(options);
 
 </script>
 
-	<title>Join the club!</title>
+
 </head>
 
-<body>
+<body onload="initialize()">
 	<header>	
 		<div class="wrapper">
 			<h1>GoGo Deals<span class="color"></span></h1>
@@ -143,29 +185,25 @@ client.connect(options);
 <div id ="login" > <!--class="wrapper">-->
     <div class="reg-container">
     	<!--Just need to inset a pic, I want to see if we can use their facebook profile pic-->
-    	 <img src="images/features-icon-1.png" alt="Smiley face" height="120" width="auto">
+    	 <img src="images/features-icon-1.png" alt="Smiley face" height="120">
     	<form>
+        <div class="form-input">
+          <input type="text" name="email" id="email" placeholder=" Email Address"/>
+        </div>
+    		
     		<div class="form-input">
-    			<input type="text" name="username" id="username" placeholder=" Enter Username">
-    		</div>
-    		<div class="form-input">
-    			<input type="password" name="password" id="password" placeholder=" Enter Password">
-    		</div>
-    		<div class="form-input">
-    			<input type="text" name="name" id="name" placeholder=" Name"> 
-    		</div>
-    		<div class="form-input">
-    			<input type="text" name="business name" id="buss_name" placeholder=" Company Name">
+    			<input type="password" name="password" id="password" placeholder=" Enter Password"/>
     		</div>
 
     		<div class="form-input">
-    			<input type="text" name="email" id="email" placeholder=" Email Address">
-    		</div>
+          <input type="text" name="business name" id="buss_name" placeholder=" Company Name"/>
+        </div>
+
     		<div class="form-input">
-    			<input type="text" name="country" id="country" placeholder=" Country">
+    			<input type="text" name="address" id="address" onFocus="geolocate()" placeholder=" Address"/>
     		</div>
     		
-    		<a type="submit" name="submit" class="btn-login" onclick ="login()" >Sign-Up</a>
+    		<a class="btn-login" onclick="publishStuff()" >Sign-Up</a>
             
 
     		<!--<a href="#" class="fp">Forgot Your Password?</a><br><br>
@@ -173,9 +211,9 @@ client.connect(options);
     	</form>
     	</div>
     </div>
-    </div>
+    
 
-</body>
+
 <footer>
     	<div class="wrapper">
     		<div id="footer-info">
@@ -194,4 +232,5 @@ client.connect(options);
     		<div class="clear"></div>
     	</div>
     </footer>
+    </body>
 </html>

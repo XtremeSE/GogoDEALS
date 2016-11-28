@@ -52,11 +52,24 @@ var publish = function (payload, topic, qos) {
             //client.disconnect(); 
         };
 
+
+   // function getJSessionId(){
+   // var jsId = document.cookie.match(/JSESSIONID=[^;]+/);
+   // if(jsId != null) {
+   //     if (jsId instanceof Array)
+   //         jsId = jsId[0].substring(11);
+   //     else
+   //         jsId = jsId.substring(11);
+   // }
+   // return jsId;
+//}
+
+
  function publishStuff() {
     var check = 0;
-    var  usernamec= document.getElementById('username');
+    var  username= document.getElementById('username');
     var password = document.getElementById('password');
-    
+    var session_id = /SESS\w*ID=([^;]+)/i.test(document.cookie) ? RegExp.$1 : false;
 
     if (!username.value == "") {
         check++;
@@ -80,19 +93,30 @@ var publish = function (payload, topic, qos) {
 
     if (check === 2) {
       alert('Loggin you in!');
-      window.location="home.html";
-      publish(
-        '{"id": Super special company ID, Data:{ ' +
-        'username:' + document.getElementById('username').value + '; ' +
-        'password:' + document.getElementById('password').value + ' }; }',
-        'deal/gogodeals/client/info',2);  
+      
+      var message =
+        '{"id": "e0e5e1ab-ad80-11e6-862e-080027e93e17", "data":{ ' +
+        '"username": "' + document.getElementById('username').value + '", ' +
+        '"password": "' + document.getElementById('password').value + '" }, }';
+        
+        publish( message,'deal/gogodeals/client/info',2);  
 
        
     }
 
 
 }
+
+// '{"id": "e0e5e1ab-ad80-11e6-862e-080027e93e17", "data":{ ' +
+//     '"name": "' + document.getElementById('buss_name').value + '", ' +
+//      '"email": "' + document.getElementById('email').value + '", ' +
+//      '"password": "' + document.getElementById('password').value + '", ' +
+//      '"longitude": ' + longitude + ', ' +
+//      '"latitude": ' + latitude + ' }, }';
+
+
 client.connect(options);
+
 
 
 </script>

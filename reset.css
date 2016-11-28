@@ -560,7 +560,13 @@ footer {
 #footer-links ul li {
 	margin: 10px 0;
 }
+/*JSCROLLPANE*/
 
+.scroll-pane{
+	width:100px;
+	height: 200px;
+	overflow: auto;
+}
 /*LOGIN/REGISTER*/
 
 
