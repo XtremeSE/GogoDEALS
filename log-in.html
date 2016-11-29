@@ -69,7 +69,7 @@ var publish = function (payload, topic, qos) {
     var check = 0;
     var  username= document.getElementById('username');
     var password = document.getElementById('password');
-    var session_id = /SESS\w*ID=([^;]+)/i.test(document.cookie) ? RegExp.$1 : false;
+    //var session_id = /SESS\w*ID=([^;]+)/i.test(document.cookie) ? RegExp.$1 : false;
 
     if (!username.value == "") {
         check++;
@@ -78,7 +78,7 @@ var publish = function (payload, topic, qos) {
     } else {
        username.style.border='solid';
        username.style.borderColor = "red";
-       username.placeholder = 'Enter a Username';
+       //username.placeholder = 'Enter a Username';
     }
 
     if (!password.value == "") {
@@ -88,19 +88,17 @@ var publish = function (payload, topic, qos) {
     } else {
       password.style.border='solid';
       password.style.borderColor = "red";
-      password.placeholder = 'Enter a Password'; 
+      //password.placeholder = 'Enter a Password'; 
     }
 
     if (check === 2) {
       alert('Loggin you in!');
-      
       var message =
         '{"id": "e0e5e1ab-ad80-11e6-862e-080027e93e17", "data":{ ' +
-        '"username": "' + document.getElementById('username').value + '", ' +
-        '"password": "' + document.getElementById('password').value + '" }, }';
-        
-        publish( message,'deal/gogodeals/client/info',2);  
+        '"username": "' + username.value + '", ' +
+        '"password": "' + password.value + '" }, }';
 
+        publish(message,'deal/gogodeals/client/info',2);  
        
     }
 
@@ -140,14 +138,14 @@ client.connect(options);
     <div class="container">
     	<!--Just need to inset a pic, I want to see if we can use their facebook profile pic-->
     	
-      <img src="images/features-icon-1.png" alt="Smiley face" height="120" width="auto">
-    	<form>
-    		<div class="form-input">
+      <img src="images/features-icon-1.png" alt="Smiley face" height="120">
+    	
+    		
     			<input type="text" name="username" id="username" placeholder="Enter Username">
-    		</div>
-    		<div class="form-input">
+    		
+    		
     			<input type="password" name="password" id="password" placeholder="Enter Password">
-    		</div><br>
+    		<br>
     		<a class="btn-login" onclick="publishStuff()">Login </a>
     		<a href="#" class="fp">Forgot Your Password?</a><br><br>
         <a href="register.html" class="ca">Create New Account</a>
