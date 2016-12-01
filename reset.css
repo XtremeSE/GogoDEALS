@@ -673,7 +673,7 @@ input[type="text"], input[type="password"]{
 
 .demo-container{
 	width: 500px;
-	height: 1100px;
+	height: 900px;
 	text-align: center;
 	background-color: rgba(62,83,104,0.2);
 	border-radius: 4px;
@@ -901,6 +901,22 @@ select > option {
 }   
 .customSelectInner {
     background:url(../images/select_arrows.png) no-repeat center right;
+}
+
+input::-webkit-input-placeholder {
+color: grey;
+}
+ 
+input:-moz-placeholder { /* Firefox 18- */
+color: grey;  
+}
+ 
+input::-moz-placeholder {  /* Firefox 19+ */
+color: grey;  
+}
+ 
+input:-ms-input-placeholder {  
+color: grey;  
 }
 
 }
