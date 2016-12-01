@@ -49,20 +49,20 @@
  };
  //Theese are the options for the connection
  var options = {
-     timeout: 3,
+   timeout: 3,
      //Messages when the connection is established
      onSuccess: function () {
          //client.subscribe('topic', {qos: 2});
      },
      //Messages if the connection was a failure
      onFailure: function (message) {
-         alert("Connection failed: " + message.errorMessage);
-     }
- };
+       alert("Connection failed: " + message.errorMessage);
+   }
+};
 
 
 
- function initialize() {
+function initialize() {
 
     geocoder = new google.maps.Geocoder();
     autocomplete = new google.maps.places.Autocomplete(
@@ -104,10 +104,10 @@ function imageHandler(){
 
 
 var publish = function (payload, topic, qos) {
-   var message = new Paho.MQTT.Message(payload);
-   message.destinationName = topic;
-   message.qos = qos;
-   client.send(message);
+ var message = new Paho.MQTT.Message(payload);
+ message.destinationName = topic;
+ message.qos = qos;
+ client.send(message);
             //client.disconnect(); 
         };
 
@@ -132,12 +132,12 @@ var publish = function (payload, topic, qos) {
 
 
             } else {
-             document.getElementById('address').style.border='solid';
-             document.getElementById('address').style.borderColor = "red";
-             document.getElementById('address').placeholder = 'Incorrect adress';  
-         }
+               document.getElementById('address').style.border='solid';
+               document.getElementById('address').style.borderColor = "red";
+               document.getElementById('address').placeholder = 'Incorrect adress';  
+           }
 
-         if (!isNaN(price.value) && price.value > 0) {
+           if (!isNaN(price.value) && price.value > 0) {
             check++;
             price.style.border='transparent';
 
@@ -152,29 +152,29 @@ var publish = function (payload, topic, qos) {
             description.style.border='transparent';
 
         } else {
-           description.style.border='solid';
-           description.style.borderColor = "red";
-           description.placeholder = 'Description cant be empty';
-       }
+         description.style.border='solid';
+         description.style.borderColor = "red";
+         description.placeholder = 'Description cant be empty';
+     }
 
-       if (!time.value == "") {
+     if (!time.value == "") {
         check++;
         time.style.border='transparent';
 
     } else {
-       time.style.border='solid';
-       time.style.borderColor = "red";
-       time.selectedIndex = '0';
-   }
+     time.style.border='solid';
+     time.style.borderColor = "red";
+     time.selectedIndex = '0';
+ }
 
-   if (!filter.value == "") {
+ if (!filter.value == "") {
     check++;
     time.style.border='transparent';
 
 } else {
-   filter.style.border='solid';
-   filter.style.borderColor = "red";
-   filter.selectedIndex = '0';
+ filter.style.border='solid';
+ filter.style.borderColor = "red";
+ filter.selectedIndex = '0';
 }
 
 if (!units.value == "") {
@@ -182,9 +182,9 @@ if (!units.value == "") {
     units.style.border='transparent';
 
 } else {
-   units.style.border='solid';
-   units.style.borderColor = "red";
-   units.selectedIndex = '0';
+ units.style.border='solid';
+ units.style.borderColor = "red";
+ units.selectedIndex = '0';
 }
 
 if (!filter.value == "") {
@@ -192,9 +192,9 @@ if (!filter.value == "") {
     units.style.border='transparent';
 
 } else {
-   units.style.border='solid';
-   units.style.borderColor = "red";
-   units.selectedIndex = '0';
+ units.style.border='solid';
+ units.style.borderColor = "red";
+ units.selectedIndex = '0';
 }
 
 if (!name.value == "") {
@@ -208,9 +208,9 @@ if (!name.value == "") {
 }
 
 if (binaryPicture) {
-   check++;
+ check++;
 } else {
-   alert('You need to add a picture');
+ alert('You need to add a picture');
 }
 
 if (check === 9) {
@@ -271,18 +271,18 @@ if (check === 9) {
             <input class="demo-box" placeholder="Deal Description" type="text"  name="dealdescriptionbox" id="description" />
             <input class="demo-box" placeholder="Price in SEK" type="text" name="originalpricebox" id="price" />
             <select id="filter">
-             <option value="" disabled selected hidden>Please choose category</option>
-             <option value="" disabled selected hidden>Deal category</option>
-             <option value="food">food</option>
-             <option value="alcohol">alcohol</option>
-             <option value="stuff">stuff</option>
-             <option value="activities">activities</option>
-             <option value="random">random</option>
+               <option value="" disabled selected hidden>Please choose category</option>
+               <option value="" disabled selected hidden>Deal category</option>
+               <option value="food">food</option>
+               <option value="alcohol">alcohol</option>
+               <option value="stuff">stuff</option>
+               <option value="activities">activities</option>
+               <option value="random">random</option>
 
 
 
-         </select>
-         <select id="units">
+           </select>
+           <select id="units">
             <option value="" disabled selected hidden>Please choose nr of deals</option>
             <option value="" disabled selected hidden>Number of deals</option>
             <option value="5">5</option>
@@ -299,39 +299,39 @@ if (check === 9) {
 
         </select>
         <select id="time">
-           <option value="" disabled selected hidden>Please choose end time</option>
-           <option value="" disabled selected hidden>Pick an end time for the deal</option>
-           <option value="00:00:00">00:00</option>
-           <option value="01:00:00">01:00</option>
-           <option value="02:00:00">02:00</option>
-           <option value="03:00:00">03:00</option>
-           <option value="04:00:00">04:00</option>
-           <option value="05:00:00">05:00</option>
-           <option value="06:00:00">06:00</option>
-           <option value="07:00:00">07:00</option>
-           <option value="08:00:00">08:00</option>
-           <option value="09:00:00">09:00</option>
-           <option value="10:00:00">10:00</option>
-           <option value="11:00:00">11:00</option>
-           <option value="12:00:00">12:00</option>
-           <option value="13:00:00">13:00</option>
-           <option value="14:00:00">14:00</option>
-           <option value="15:00:00">15:00</option>
-           <option value="16:00:00">16:00</option>
-           <option value="17:00:00">17:00</option>
-           <option value="18:00:00">18:00</option>
-           <option value="19:00:00">19:00</option>
-           <option value="20:00:00">20:00</option>
-           <option value="21:00:00">21:00</option>
-           <option value="22:00:00">22:00</option>
-           <option value="23:00:00">23:00</option>
+         <option value="" disabled selected hidden>Please choose end time</option>
+         <option value="" disabled selected hidden>Pick an end time for the deal</option>
+         <option value="00:00:00">00:00</option>
+         <option value="01:00:00">01:00</option>
+         <option value="02:00:00">02:00</option>
+         <option value="03:00:00">03:00</option>
+         <option value="04:00:00">04:00</option>
+         <option value="05:00:00">05:00</option>
+         <option value="06:00:00">06:00</option>
+         <option value="07:00:00">07:00</option>
+         <option value="08:00:00">08:00</option>
+         <option value="09:00:00">09:00</option>
+         <option value="10:00:00">10:00</option>
+         <option value="11:00:00">11:00</option>
+         <option value="12:00:00">12:00</option>
+         <option value="13:00:00">13:00</option>
+         <option value="14:00:00">14:00</option>
+         <option value="15:00:00">15:00</option>
+         <option value="16:00:00">16:00</option>
+         <option value="17:00:00">17:00</option>
+         <option value="18:00:00">18:00</option>
+         <option value="19:00:00">19:00</option>
+         <option value="20:00:00">20:00</option>
+         <option value="21:00:00">21:00</option>
+         <option value="22:00:00">22:00</option>
+         <option value="23:00:00">23:00</option>
 
-       </select>
-       <br>
-       <input class="demo-box" type="text" id="datepicker" placeholder="Pick an end date for the deal">
+     </select>
+     <br>
+     <input class="demo-box" type="text" id="datepicker" placeholder="Pick an end date for the deal">
 
-       <script src="pikaday.js"></script>
-       <script>
+     <script src="pikaday.js"></script>
+     <script>
 
         picker = new Pikaday(
         {

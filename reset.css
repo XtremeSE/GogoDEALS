@@ -78,6 +78,7 @@ h1 {
 	/*text-transform: uppercase;*/
 	text-align: center;
 	margin-bottom: 20px;
+	margin-top:0;
 }
 
 h2 {
@@ -472,8 +473,8 @@ background using rgba.*/
 
 #secondary-content article .overlay {
 	background: rgba(255, 255, 255, .95);
-	height: 350px;
-	width: 210px;
+	height: 230px;
+	width: 190px;
 	padding: 20px;
 }
 
@@ -560,6 +561,107 @@ footer {
 #footer-links ul li {
 	margin: 10px 0;
 }
+/*JSCROLLPANE AND STUFF ON THE HOME PAGE*/
+
+.scroll-pane{
+	width:450px;
+	height: 100px;
+	overflow: auto;
+	border-width: 1px;
+	text-align: center;
+
+}
+
+.wrap {
+  height: 100vh;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: box;
+  display: flex;
+}
+main {
+  -webkit-box-flex: 1;
+  -o-box-flex: 1;
+  box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: box;
+  display: flex;
+}
+@media (max-width: 200px) {
+  main {
+    -webkit-box-orient: vertical;
+    -o-box-orient: vertical;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+  }
+}
+aside,
+article {
+  overflow-y: scroll;
+  padding: 2em;
+}
+aside {
+  -webkit-box-flex: 1;
+  -o-box-flex: 1;
+  box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  background: #f7f7f7;
+}
+article {
+  -webkit-box-flex: 2;
+  -o-box-flex: 2;
+  box-flex: 2;
+  -webkit-flex: 2;
+  -ms-flex: 2;
+  flex: 2;
+  background: #f0eeee;
+}
+h1 {
+  margin-top: 0;
+}
+
+#box {
+	width:450px;
+	height:auto;
+	-webkit-border-radius: 20px;
+	-moz-border-radius: 20px;
+	border-radius: 20px;
+	background:rgba(206,227,191,0.6);
+}
+
+#box::after{
+	content: "\f21b";
+	position: absolute;
+	font-family: "FontAwesome";
+	padding-right:2px;
+	padding-top: 2px;
+	font-size: auto;
+	color:#808080
+
+}
+.shape {
+  height: 150px;
+  width: 150px;
+  background-color: #0074d9;
+  border-radius: 80px;
+  margin-bottom: 30px;
+  float: left;
+  margin-right: 20px;
+}
+
+.shape2 {
+  border-radius: 30px;
+}
+
 
 /*LOGIN/REGISTER*/
 
