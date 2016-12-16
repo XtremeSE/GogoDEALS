@@ -33,7 +33,7 @@
         var session_id = generateUUID();
 
 // Create a client with the Paho Api. set it to the correct broker ip, port and your "signature"
- var client = new Paho.MQTT.Client("176.10.136.208", 9001, "web" + Math.random());
+ var client = new Paho.MQTT.Client("54.154.153.243", 1884, "web" + Math.random());
  
  //Gets  called if the websocket/mqtt connection gets disconnected for any reason
  client.onConnectionLost = function (responseObject) {
@@ -53,21 +53,17 @@
             if (obj.data){
               window.location="log-in.html";
             }else{
-              //not in use yet.
+              
             }
           };
-         //if (text.id[0] == session_id){
-          //if (text.data[0] === 'client added'){
-        //   window.location="home.html";
-        //}
-    //}catch(e){
-      //alert("i guess it wasn't the right id");
-    //}
+         
 
      
       
-        
+  client.disconnect();       
  };
+
+
  //Theese are the options for the connection
  var options = {
      timeout: 3,
@@ -81,7 +77,7 @@
      }
  };
 
-
+  //generates a uuid as the session id
   function generateUUID() {
     var d = new Date().getTime();
     var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -92,7 +88,7 @@
     return uuid;
 };
 
-
+  //initializes the google mpas api  for the location of the client.
   function initialize() {
 
     geocoder = new google.maps.Geocoder();
@@ -103,6 +99,7 @@
     });
 }
 
+//this function publishes the message to the broker.
 var publish = function (payload, topic, qos) {
    var message = new Paho.MQTT.Message(payload);
    message.destinationName = topic;
@@ -123,6 +120,7 @@ var publish = function (payload, topic, qos) {
  //   return jsId;
  //}       
 
+//if all the elements are !="", publish the method
  function publishStuff() {
     var check = 0;
 

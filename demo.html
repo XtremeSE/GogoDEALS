@@ -39,7 +39,7 @@
 
 
  // Create a client with the Paho Api. set it to the correct broker ip, port and your "signature"
- var client = new Paho.MQTT.Client("176.10.136.208", 9001, "web" + Math.random());
+ var client = new Paho.MQTT.Client("54.154.153.243", 1884, "web" + Math.random());
  
  //Gets  called if the websocket/mqtt connection gets disconnected for any reason
  client.onConnectionLost = function (responseObject) {
@@ -49,7 +49,7 @@
  //When a message is recieved from the topic you are subscribed to it gets printed.
  client.onMessageArrived = function (message) {
      //Do something with the push message you received
-     $('#messages').append('<span>Topic: ' + message.destinationName + '  | ' + message.payloadString + '</span><br/>');
+     
  };
  //These are the options for the connection
  var options = {
@@ -64,25 +64,8 @@
      }
  };
 
- //function clearData(){
-    
-   // var address = document.getElementById('address');
-   // var units = document.getElementById('units');
-   // var price = document.getElementById('price');
-   // var description = document.getElementById('description');
-   // var duration = document.getElementById('duration');
-   // var company = document.getElementById('company');
 
-    //company.placeholder == '';
-    //duration.placeholder =='';
-    //description.placeholder =='';
-    //price.placeholder ==" ";
-    //units.placeholder ==' ';
-    //address.placeholder =="";
-
- //}-->
-
-
+//This is for the google maps, google map api
  function initialize() {
 
     geocoder = new google.maps.Geocoder();
@@ -93,6 +76,7 @@
     });
 }
 
+//This is for the images that are uploaded to the page for the deals
 function imageHandler(){
 
     var fileInput = document.getElementById('fileInput');
@@ -123,15 +107,34 @@ function imageHandler(){
     });
 }
 
-
+//this publish function is pretty the same as the others. 
 var publish = function (payload, topic, qos) {
+    alert('im publishing the deal' + payload);
      var message = new Paho.MQTT.Message(payload);
+     var inputelem = document.getElementsByTagName('input');
+     var selectelem = document.getElementsByTagName('select');
+     var optionselem = document.getElementById('units');
+
      message.destinationName = topic;
      message.qos = qos;
      client.send(message);
+     
+for (var ii=0; ii < inputelem.length; ii++) {
+    inputelem[ii].value = "";
+  }
+for (var ii=0; ii < selectelem.length;ii++){
+    selectelem[ii].value = "";
+}
+for (var ii=0; ii < selectelem.length;ii++){
+    selectelem[ii].value = "";
+}
+//for (var ii=0; ii < optionselem.length; ii++){
+//    optionselem[ii].value = "";
+//}
                 //client.disconnect(); 
             };
 
+            //if all the fields are filed, publish the info to the broker
             function publishWithAddress() {
                 var check = 0;
                 var address = document.getElementById('address');
@@ -226,7 +229,7 @@ var publish = function (payload, topic, qos) {
     if (check === 8) {
         alert('Deal added!');
         var message = 
-        '{"id": "'+sessionStorage.client_id+'", "data":{ ' +
+        '{"id": "'+ sessionStorage.client_id +'", "data":{ ' +
         '"client_id": "'+ sessionStorage.client_id +'", ' +
         '"name": "' + name.value + '", ' +
         '"price": ' +price.value + ', ' +
@@ -338,12 +341,12 @@ $(document).ready(function() {
                 <span class="sidebar-menu-arrow"></span>
                 <ul id="submenu" class="sub-menu">
                     <li><a href="demo.html">Create New Deal</a></li>
-                    <li><a href="mydeals.html">View Current Deals</a></li>
-                    <li><a href="predeals.html">View Previous Deals</a></li>
+                    <!--<li><a href="mydeals.html">View Current Deals</a></li>
+                    <li><a href="predeals.html">View Previous Deals</a></li>-->
                 </ul>
             </li>
-            <li><a href="editprofile.html">Edit Profile</a></li>
-            <li><a href="#">Help</a></li>
+            <!--<li><a href="editprofile.html">Edit Profile</a></li>
+            <li><a href="#">Help</a></li>-->
         </ul>           
     </div>
 </div>    
@@ -353,11 +356,20 @@ $(document).ready(function() {
             <img src="images/features-icon-1.png" alt="Smiley face" height="120">
                 <br>
                 <br>
+               
                 <input type="hidden" name="date" id="date">
+              
+                
                 <input class="demo-box" placeholder="Deal Name" type="text" name="name" id="name" />
+              
+                
                 <input class="demo-box" placeholder="Deal Location" onFocus="geolocate()" type="text" name="adressbox" id="address" />
+                
+                
                 <input class="demo-box" placeholder="Deal Description" type="text"  name="dealdescriptionbox" id="description" />
+                
                 <input class="demo-box" placeholder="Price in SEK" type="text" name="originalpricebox" id="price" />
+               
                 <select id="filter">
                    <option value="" disabled selected hidden>Please choose category</option>
                    <option value="" disabled selected hidden>Deal category</option>
@@ -371,7 +383,7 @@ $(document).ready(function() {
 
                </select>
                <select id="units">
-                <option value="" disabled selected hidden>Please choose nr of deals</option>
+                <option value="" disabled selected hidden>How many deals are you selling?</option>
                 <option value="" disabled selected hidden>Number of deals</option>
                 <option value="5">5</option>
                 <option value="10">10</option>
@@ -416,6 +428,7 @@ $(document).ready(function() {
 
          </select>
          <br>
+         
          <input class="demo-box" type="text" id="datepicker" placeholder="Pick an end date for the deal">
 
          <script src="pikaday.js"></script>
@@ -436,12 +449,13 @@ $(document).ready(function() {
         Select an Image
         <br>
         <br>
-        <input  type="file" onclick="imageHandler()" id="fileInput">
+        <input type="file" value="Choose an Image"onclick="imageHandler()" id="fileInput">
         <br>
         <div class="img" id="fileDisplayArea"></div>
         <br>
+       
         <button class="btn-login" onclick="publishWithAddress()">Send</button>
-
+        
     <br>
 
     </div>

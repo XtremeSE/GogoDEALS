@@ -564,8 +564,8 @@ footer {
 /*JSCROLLPANE AND STUFF ON THE HOME PAGE*/
 
 .scroll-pane{
-	width:450px;
-	height: 100px;
+	width:500px;
+	height: 300px;
 	overflow: auto;
 	border-width: 1px;
 	text-align: center;
@@ -630,7 +630,7 @@ h1 {
 }
 
 #box {
-	width:450px;
+	width:500px;
 	height:auto;
 	-webkit-border-radius: 20px;
 	-moz-border-radius: 20px;
@@ -638,14 +638,14 @@ h1 {
 	background:rgba(206,227,191,0.6);
 }
 
-#box::after{
+/*#box::after{
 	content: "\f21b";
 	position: absolute;
 	font-family: "FontAwesome";
 	padding-right:2px;
 	padding-top: 2px;
 	font-size: auto;
-	color:#808080
+	color:#808080*/
 
 }
 .shape {
@@ -788,9 +788,39 @@ input[type="text"], input[type="password"]{
 .demo-container img{
 	width: 120; 
 	height: 120px;
-	margin-top: 10px;
+	margin-top: -60px;
 	margin-bottom: 30px;
 
+}
+/*This is for the icons in the login fields*/
+.demo-container::before{
+	content: "\f06b";
+	position: absolute;
+	font-family: "FontAwesome";
+	padding-left:5px;
+	padding-top: 7px;
+	font-size: 35px;
+	color:#02b8dd;
+	
+}
+
+.demo-container:nth-child(2)::before{
+	content: "\f041";
+	color:#02b8dd;
+}
+
+.demo-container:nth-child(3)::before{
+	content: "\f129";
+	color:#02b8dd;
+}
+
+.demo-container:nth-child(4)::before{
+	content: "\f0d6";
+	color:#02b8dd;
+}
+.demo-container:nth-child(5)::before{
+	content: "\f073";
+	color:#02b8dd;
 }
 
 

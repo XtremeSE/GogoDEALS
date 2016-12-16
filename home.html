@@ -1,330 +1,326 @@
 <!DOCTYPE html>
 <html>
 <head>  
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-    <link rel="stylesheet" type="text/css" href="style.css">    
+		<link rel="stylesheet" type="text/css" href="style.css">    
 
-    <link rel="stylesheet" type="text/css" href="reset.css">
+		<link rel="stylesheet" type="text/css" href="reset.css">
 
-    <link rel="stylesheet" type="text/css" href="font-awesome-4.6.3/css/font-awesome.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css">
-    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.js"></script>
-    <script src="script.js"></script>
-    <link rel="stylesheet" href="reset.css">
+		<link rel="stylesheet" type="text/css" href="font-awesome-4.6.3/css/font-awesome.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css">
+		<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.js"></script>
+		<script src="script.js"></script>
+		<link rel="stylesheet" href="reset.css">
 
-    <link href='http://fonts.googleapis.com/css?family=Crete+Round' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
-    <title>Welcome Home</title>
-    <!--styles neede by JscrollPane-->
-    <link type="text/css" href="style/jquery.jscrollpane.css" rel="stylesheet" media="all"/>
-    <!--latest jquery firect from google's CDN -->
-    <script type="text/javascript" scr="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
-    </script>
+		<link href='http://fonts.googleapis.com/css?family=Crete+Round' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
+		<title>Welcome Home</title>
+		<!--styles neede by JscrollPane-->
+		<link type="text/css" href="style/jquery.jscrollpane.css" rel="stylesheet" media="all"/>
+		<!--latest jquery firect from google's CDN -->
+		<script type="text/javascript" scr="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+		</script>
 
-    <!--the mousewheel plugin - optional to provide mousewheel support-->
-    <script type="text/javascript" src="script/jquery.mousewheel.js"></script>
-    <!--the scrollpane script -->
-    <script type="text/javascript" src="script/jquery.jscrollpane.min.js"></script>
+		<!--the mousewheel plugin - optional to provide mousewheel support-->
+		<script type="text/javascript" src="script/jquery.mousewheel.js"></script>
+		<!--the scrollpane script -->
+		<script type="text/javascript" src="script/jquery.jscrollpane.min.js"></script>
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqFzoHdRxRZ3Hrv9jdT_uZbJxayyLUqgw&libraries=places"></script>
-    <script type="text/javascript">
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
+		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqFzoHdRxRZ3Hrv9jdT_uZbJxayyLUqgw&libraries=places"></script>
+		<script type="text/javascript">
 
 
-        var geocoder;
-        var autocomplete;
-        var latitudelongitude;
-        var binaryPicture;
-        var client_id = sessionStorage.client_id;
+				var geocoder;
+				var autocomplete;
+				var latitudelongitude;
+				var binaryPicture;
+				var client_id = sessionStorage.client_id;
 
  // Create a client with the Paho Api. set it to the correct broker ip, port and your "signature"
- var client = new Paho.MQTT.Client("176.10.136.208", 9001, "web" + Math.random());
+ var client = new Paho.MQTT.Client("54.154.153.243", 1884, "webe" + Math.random());
+ //alert('creating new session');
  
  //Gets  called if the websocket/mqtt connection gets disconnected for any reason
  client.onConnectionLost = function (responseObject) {
-     //Messages if the connection is lost
-     alert("connection lost: " + responseObject.errorMessage);
+		 //Messages if the connection is lost
+		 alert("connection lost: " + responseObject.errorMessage);
  };
  //When a message is recieved from the topic you are subscribed to it gets printed.
  client.onMessageArrived = function (message) {
-     //Do something with the push message you received
-     alert(message.payloadString);
-     //display in the deal section
+		 //Do something with the push message you received
+		 alert(message.payloadString);
+
+		 //I want to create a js object that shows a styled deal for each deal. 
+//Code that shows a styled 
+var obj;
+var i, b;
+
+
+//var box = document.getElementById('box');
+//var cssString = 'width:450px;height:auto;-webkit-border-radius: 20px;-moz-border-radius: 20px;border-radius: 20px;background:rgba(206,227,191,0.6);'
+
+      obj = JSON.parse(message.payloadString);
+      if (!obj.data == ""){
+      	//document.getElementById('box').style.cssText = cssString;
+      	b = "";
+      	for(i = 0; i < obj.data.length; i++){
+      		
+      		//add a populated box of a client's current deals
+      
+      		b+= obj.data[i].name + "<P> Price: " + obj.data[i].price + "<P> Description: " + obj.data[i].description + "<P> Expires: " + obj.data[i].duration + "<P> Deals Left: " + obj.data[i].count + "<P> ID: " + obj.data[i].id + "<P>";
+      		b+= "<P> <input type='button' id='edit' value='Edit Deal'>" + "    " + "<input type='button' id='delete' value='Delete Deal'>";
+      		b+="<HR>";
+
+      		
+      	}
+      		
+      		document.getElementById("box").innerHTML = b;
+      		//edit and delete buttons don't acutally do anything because when I creadte them dynamically, // the buttons for each deal all have the same id. Ughhhh #icantwin #fail
+      		document.getElementById("edit").onclick=function(){
+      			alert('Sorry, you actually cant do that');
+      		}
+      		document.getElementById("delete").onclick=function(){
+      			alert('Sorry, you actually cant do that either');
+      		}
+      			
+      		}
+
+      
+      
+      		//this is pretty much useless.
+      if (obj.data.user_id == sessionStorage.client_id){
+      	alert('Deal Verified!');
+      }
+
  };
+
+
  //These are the options for the connection
  var options = {
-     timeout: 3,
-     //Messages when the connection is established
-     onSuccess: function () {
-         client.subscribe('deal/gogodeals/database/clients', {qos: 2});
-     },
-     //Messages if the connection was a failure
-     onFailure: function (message) {
-         alert("Connection failed: " + message.errorMessage);
-     }
+		 timeout: 3,
+		 //Messages when the connection is established
+		 onSuccess: function () {
+				 client.subscribe('deal/gogodeals/database/clients', {qos: 2});
+				 client.subscribe('deal/gogodeals/database/verified', {qos: 2});
+				 getDeals();
+		 },
+		 //Messages if the connection was a failure
+		 onFailure: function (message) {
+				 alert("Connection failed: " + message.errorMessage);
+		 }
  };
-
- //function clearData(){
-    
-   // var address = document.getElementById('address');
-   // var units = document.getElementById('units');
-   // var price = document.getElementById('price');
-   // var description = document.getElementById('description');
-   // var duration = document.getElementById('duration');
-   // var company = document.getElementById('company');
-
-    //company.placeholder == '';
-    //duration.placeholder =='';
-    //description.placeholder =='';
-    //price.placeholder ==" ";
-    //units.placeholder ==' ';
-    //address.placeholder =="";
-
- //}-->
-
-
-
-function getDeals() {
-    
-    var deal = '{"id": "' + client_id + '", "data":{} }';
-    alert('Im about to send ' + deal);
-    publish(deal,'deal/gogodeals/deal/info',2);
-    //location.reload();
-    //clearData();
-}
-
-
-var publish = function (payload, topic, qos) {
-   alert('pubishing' + payload.payloadString);
-   var message = new Paho.MQTT.Message(payload);
-   message.destinationName = topic;
-   message.qos = qos;
-   client.send(message);
-            //client.disconnect(); 
-        };
-
 
  // This is the publish method that takes the payload, topic and quality of service.
  // It then creates a paho message with the values given and then sends it.
+var publish = function (payload, topic, qos) {
+	 //alert('pubishing the following payload (either to verify or to get clients deals): ' + payload);
+	 //alert(topic);
+
+	 var message = new Paho.MQTT.Message(payload);
+	 message.destinationName = topic;
+	 message.qos = qos;
+	try{client.send(message);
+						//client.disconnect(); 
+				}catch(e){
+						alert("not connected");
+				};}
+//This is the function that creates and calls the method to send a message who's 
+//return response will show te deals that a user might have, otherwise the return
+// message will be empty.
+function getDeals() {
+		
+		var message = '{"id": "' + client_id + '", "data":{}, }';
+		//sessionStorage.deal = message;
+		//alert('Im about to send ' + message);
+
+		publish(message,'deal/gogodeals/deal/info',2);
+		//location.reload();
+		//clearData();
+}
+//this is pretty much the same as every other pre-publish method. it passes the message to 
+//publish() and then the message is sent to the broker. 
+function verify() {
+	
+	var ver_code = document.getElementById('verify');
+	var message = '{"id": "'+ ver_code.value +'", "data": {} }';
+	alert(ver_code.value + ' Deal Verified!');
+	if(!ver_code.value == ""){
+		ver_code.style.border="transparent";
+		 alert('verification message is: ' + message);
+		 publish(message,'deal/gogodeals/deal/verify',2);
+	} else {
+				ver_code.style.border='solid';
+				ver_code.style.borderColor = "red";
+				ver_code.placeholder = 'Enter verification code'; 
+			}   
+
+
+}
+
+
+
+
  
 
-        client.connect(options);
+				
 
-//This is for the Hamburger thing when it does the cool hamber-to-X-thing
+//This is for the Hamburger thing when it does the cool hamburger-to-X-thing
 //#MyDescriptionsTho
 //#SoDesctiptive
 //#OnTheDescrip
 $(document).ready(function() {
-  var $toggleButton = $('.toggle-button');
-  $toggleButton.on('click', function() {
-    $(this).toggleClass('button-open');
-  });
+	var $toggleButton = $('.toggle-button');
+	$toggleButton.on('click', function() {
+		$(this).toggleClass('button-open');
+	});
 }); 
 
-//This is to make the menu actually pop out.
+//This is to make the menu like #comeoutofthecloset.
 $(document).ready(function() {
-    var $toggleButton = $('.toggle-button'),
-        $menuWrap = $('.menu-wrap');
+		var $toggleButton = $('.toggle-button'),
+				$menuWrap = $('.menu-wrap');
 
-    $toggleButton.click(function() {
-        $menuWrap.toggleClass('menu-show');
-   });
+		$toggleButton.click(function() {
+				$menuWrap.toggleClass('menu-show');
+	 });
 });     
 
  
 
 //This is for the sub-Menu Items
 $(document).ready(function() {
-    var $sidebarArrow = $('.sidebar-menu-arrow'),
-         $deals = $(document.getElementById('deals')),
-          $submenu = $(document.getElementById('submenu'));
-    $sidebarArrow.click(function() {
-        $(this).next().slideToggle(300);
-    });
-    $deals.click(function() {
-        $submenu.slideToggle();
-    });
+		var $sidebarArrow = $('.sidebar-menu-arrow'),
+				 $deals = $(document.getElementById('deals')),
+					$submenu = $(document.getElementById('submenu'));
+		$sidebarArrow.click(function() {
+				$(this).next().slideToggle(300);
+		});
+		$deals.click(function() {
+				$submenu.slideToggle();
+		});
 
-    //this doesn't work but it's supposed to exit the menu if the 
-    //menu is open but you click on a part of the page that is not the menu.
-     if (toggleClass('menu-show')){
-      document.click(function(){
-    $(this).toggleClass('button-open');
-    });}
+		//this doesn't work but it's supposed to exit the menu if the 
+		//menu is open but you click on a part of the page that is not the menu.
+		 if (toggleClass('menu-show')){
+			document.click(function(){
+		$(this).toggleClass('button-open');
+		});}
 });
 
 
-
-
-//todo wednesday: delete all the things that are not needed here, create a js object that 
-//that shows a styled deal for each deal. 
-//pseudo code: 
-//onload: publish(sessionstorage.clientid(), topic, 2)
-//client.onMessageArrived = function(message){
-//   alert(message.payloadString);
-//  var obj;
-//  obj = JSON.parse(message.payloadString);
-//          if (!obj == ""){
-
-              //talk to johan about when there are multiple deals? 
-              //maybe for (int i = 0; i < data.length(), i ++){
-// one object for each deal (number in 'data') like: 
-
-//            like style the div here instead of css: 
-//            var style = document.getelementbyid('box');
-//            or.. keep that as is and just pass the values to the things. 
-
-//            document.getElementbyid('itemname') = obj.data.1.name;
-//            document.getElementbyid('itemprice') = obj.data.1.price;
-//            document.getelementbyid('itempic') = turnbackintoapic(obj.data.1.picture);
-//            ...same for description
-              //}
-//            
-//};
+function connect(){
+	try{client.connect(options);
+			}catch(e){
+alert('youre not connected...');
+}
+}
 
 
 
-        </script>
-    </head>
+				</script>
+		</head>
 
 
-<body onload="getDeals()">
-    <!--This is for the cool menu button-->
-    <span class="toggle-button">
-     <div class="menu-bar menu-bar-top"></div>
-     <div class="menu-bar menu-bar-middle"></div>
-     <div class="menu-bar menu-bar-bottom"></div>
+<body onload="connect()">
+		<!--This is for the cool menu button-->
+		<span class="toggle-button">
+		 <div class="menu-bar menu-bar-top"></div>
+		 <div class="menu-bar menu-bar-middle"></div>
+		 <div class="menu-bar menu-bar-bottom"></div>
 </span>
-    <header>    
-        <div class="wrapper">
-            <h1>GoGo Deals<span class="color"></span></h1>
-            <nav>
-            
-                <ul>
-                    <li><a href="index.html">Logout</a></li>
-                    <!--<li><a href="#">Deals</a></li>
-                    <li><a href="#">Contact</a></li>
-                    <li><a href="">Menu</li>-->
-                    
-                </ul>
-            </nav>
-        </div>
+		<header>    
+				<div class="wrapper">
+						<h1>GoGo Deals<span class="color"></span></h1>
+						<nav>
+						
+								<ul>
+										<li><a href="index.html">Logout</a></li>
+										<!--<li><a href="#">Deals</a></li>
+										<li><a href="#">Contact</a></li>
+										<li><a href="">Menu</li>-->
+										
+								</ul>
+						</nav>
+				</div>
 
-    </header>
+		</header>
 
 
 <!--This is for the menu that will pop out-->
 <div class="menu-wrap">
-    <div class="menu-sidebar">
-        <ul class="menu">
-        <br><br><br><br><br><br>
-            <li><a href="home.html">Home</a></li>
-            <!--<li><a href="profile.html">My Profile</a></li>-->
-            <li class="menu-item-has-children"><a href="#" id="deals">Deals</a>
-                <span class="sidebar-menu-arrow"></span>
-                <ul id="submenu" class="sub-menu">
-                    <li><a href="demo.html">Create New Deal</a></li>
-                    <li><a href="mydeals.html">View Current Deals</a></li>
-                    <li><a href="predeals.html">View Previous Deals</a></li>
-                </ul>
-            </li>
-            <li><a href="editprofile.html">Edit Profile</a></li>
-            <li><a href="#">Help</a></li>
-        </ul>           
-    </div>
+		<div class="menu-sidebar">
+				<ul class="menu">
+				<br><br><br><br><br><br>
+						<li><a href="home.html">Home</a></li>
+						<!--<li><a href="profile.html">My Profile</a></li>-->
+						<li class="menu-item-has-children"><a href="#" id="deals">Deals</a>
+								<span class="sidebar-menu-arrow"></span>
+								<ul id="submenu" class="sub-menu">
+										<li><a href="demo.html">Create New Deal</a></li>
+										<!--<li><a href="mydeals.html">View Current Deals</a></li>
+										<li><a href="predeals.html">View Previous Deals</a></li>-->
+								</ul>
+						</li>
+						<!--<li><a href="editprofile.html">Edit Profile</a></li>
+						<li><a href="#">Help</a></li>-->
+				</ul>           
+		</div>
 </div>
 
-    <div id ="login" > 
-        <div class="reg-container">
-        <img src="images/features-icon-1.png" alt="Smiley face" height="120" width="auto">
-        <br>
-            <h3>
-                welcome home, <script>document.write(sessionStorage.name);</script>
-            </h3>
-            <div class="form-input">
-              <input type="text" name="verify" id="verify" placeholder="Verification Code"/>
-             </div>
-             <a class="btn-login" onclick="verify()" >Verify</a>
-            <div class="scroll-pane" style="height:120px; width:400px; font:16px/26px Georgia, Garamond, Serif; overflow:auto;"> <h1></h1>
+		<div id ="login" > 
+				<div class="reg-container">
+				<img src="images/features-icon-1.png" alt="Smiley face" height="120" width="auto">
+				<br>
+						<h3>
+								welcome home, <script>document.write(sessionStorage.name);</script>
+						</h3>
+						<div class="form-input">
+							<input type="text" name="verify" id="verify" placeholder="Verification Code"/>
+						 </div>
+						 <a class="btn-login" onclick="verify()">Verify</a>
+						 <h1>Current Deals</h1>
+						<div class="scroll-pane" id="scroll-pane"> 
+						
+						<div id="box">
+							<input type="button" class="btn-login" id="edit" value="Edit Deal">
+							
+						</div>
+						</div>
+						
 
-            </div>
-            
-            <div class="scroll-pane"> 
-            <h1>Current Deals</h1>
-              <div id="box">Just modify width and height values to get what you need...</div>
-            </div>
-             <div class="scroll-pane"> 
-             <h1>Past Deals</h1>
-              Hey I'm in a scrollpane! You need to download a few files and put the on the server to make it work, fyi.
-            go to : http://jscrollpane.kelvinluck.com/basic.html to find what I mean also, check a few youtube tutorials or something. Don't be lazy. akdjbf;ka jdbf;akbjd f;akb jf;k sbj fgk ;sbj fgk asbglab gla hbsg alsh bfgl   sbfl ashb glsa hbfg as;k fjghasjkfg;aksjg ;SKFGJH ;ksfjgh a;ksfhjga ;ksfjgh aksjfgha ;kjshg a;skfjgh a;khjsfg a;kfjshg aksjfhg akjshfg aksjgh sa;kjgh ksjhf aklsjhfg lhg asfgljhasbdfja sdjfnckajndf akndfanf adijkj i aeliadf idjf iadnfk adlifj adfha di fijgrfnwtrkj v aef isj sdfn sdfjs
-            </div>
-
-            <!--<div class="wrap">
- 
-  <main>
- 
-    <aside>
-      <h1>Sidebar</h1>
-      <p>
-        lipsum...Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus et ante fermentum, gravida libero in, interdum nisi. Vivamus rhoncus fringilla commodo. Phasellus mollis nulla ac facilisis efficitur. Suspendisse id mauris accumsan, consectetur magna id, aliquet dolor. Vestibulum risus magna, mattis ut interdum sit amet, rhoncus sit amet turpis. Quisque justo odio, imperdiet non sem vel, maximus lacinia nisl. Nulla at feugiat lectus. Duis vel dui sit amet nunc pulvinar porttitor sit amet et dolor. Proin semper faucibus velit, ut commodo dui varius ut. Donec venenatis mi quis neque volutpat, non faucibus felis ornare. Donec sollicitudin purus ut gravida interdum. Etiam vel feugiat ante. Aenean non urna non nisi mattis gravida. Quisque consectetur risus quis tristique efficitur.
-
-Cras sed volutpat orci. Vivamus ligula lacus, convallis vestibulum rhoncus id, molestie ac neque. Morbi et lorem eu velit condimentum porta eget malesuada tortor. Vestibulum in libero mollis, varius erat sed, egestas quam. Aliquam erat volutpat. Nulla eget consequat orci. Aenean dolor nunc, dignissim ac quam eget, venenatis tempor ligula. Mauris malesuada quis tellus at sodales. Suspendisse in ante non massa aliquam vehicula a at enim. Vestibulum aliquet, augue quis posuere molestie, leo tortor porttitor nisl, vitae scelerisque augue enim blandit mauris. Etiam sodales magna sed enim iaculis, non convallis tellus fermentum.
-
-Ut tincidunt, dolor at tempor lacinia, neque est pulvinar est, sed facilisis tortor ipsum sed tortor. Morbi ultrices ultricies nunc vitae pellentesque. Nulla sodales ex a mauris faucibus ultricies. Nam id arcu pulvinar, dictum ex nec, consectetur erat. Maecenas tristique metus justo, ac imperdiet lectus interdum eu. Maecenas pellentesque ex a nisl accumsan, a euismod tortor mollis. Sed luctus, nibh non facilisis viverra, ipsum nunc fermentum erat, a interdum justo mi in felis. Fusce a massa non lorem fringilla dictum. Nam faucibus fermentum est. Maecenas sapien est, gravida a rhoncus id, iaculis nec mauris. Integer ornare laoreet nunc sed pulvinar. Vestibulum dapibus risus nec consequat facilisis. Vivamus mollis feugiat elit, eget malesuada dolor maximus quis.
-
-Integer id varius ex, a dictum libero. Quisque volutpat ligula finibus tellus scelerisque suscipit. Nulla facilisi. Sed maximus accumsan elementum. Nunc maximus pulvinar nisl lacinia aliquam. Maecenas com
-      </p>
-    </aside>
- 
-    <article>
-      <h1>Content</h1>
-      <p>
-        lipsum..Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus et ante fermentum, gravida libero in, interdum nisi. Vivamus rhoncus fringilla commodo. Phasellus mollis nulla ac facilisis efficitur. Suspendisse id mauris accumsan, consectetur magna id, aliquet dolor. Vestibulum risus magna, mattis ut interdum sit amet, rhoncus sit amet turpis. Quisque justo odio, imperdiet non sem vel, maximus lacinia nisl. Nulla at feugiat lectus. Duis vel dui sit amet nunc pulvinar porttitor sit amet et dolor. Proin semper faucibus velit, ut commodo dui varius ut. Donec venenatis mi quis neque volutpat, non faucibus felis ornare. Donec sollicitudin purus ut gravida interdum. Etiam vel feugiat ante. Aenean non urna non nisi mattis gravida. Quisque consectetur risus quis tristique efficitur.
-
-Cras sed volutpat orci. Vivamus ligula lacus, convallis vestibulum rhoncus id, molestie ac neque. Morbi et lorem eu velit condimentum porta eget malesuada tortor. Vestibulum in libero mollis, varius erat sed, egestas quam. Aliquam erat volutpat. Nulla eget consequat orci. Aenean dolor nunc, dignissim ac quam eget, venenatis tempor ligula. Mauris malesuada quis tellus at sodales. Suspendisse in ante non massa aliquam vehicula a at enim. Vestibulum aliquet, augue quis posuere molestie, leo tortor porttitor nisl, vitae scelerisque augue enim blandit mauris. Etiam sodales magna sed enim iaculis, non convallis tellus fermentum.
-
-Ut tincidunt, dolor at tempor lacinia, neque est pulvinar est, sed facilisis tortor ipsum sed tortor. Morbi ultrices ultricies nunc vitae pellentesque. Nulla sodales ex a mauris faucibus ultricies. Nam id arcu pulvinar, dictum ex nec, consectetur erat. Maecenas tristique metus justo, ac imperdiet lectus interdum eu. Maecenas pellentesque ex a nisl accumsan, a euismod tortor mollis. Sed luctus, nibh non facilisis viverra, ipsum nunc fermentum erat, a interdum justo mi in felis. Fusce a massa non lorem fringilla dictum. Nam faucibus fermentum est. Maecenas sapien est, gravida a rhoncus id, iaculis nec mauris. Integer ornare laoreet nunc sed pulvinar. Vestibulum dapibus risus nec consequat facilisis. Vivamus mollis feugiat elit, eget malesuada dolor maximus quis.
-
-Integer id varius ex, a dictum libero. Quisque volutpat ligula finibus tellus scelerisque suscipit. Nulla facilisi. Sed maximus accumsan elementum. Nunc maximus pulvinar nisl lacinia aliquam. Maecenas com
-      </p>
-    </article>
- 
-  </main>-->
- 
 </div>
 
-        </div>
-    </div>
+				</div>
+		</div>
 
 
 
-                                <footer>
-                                    <div class="wrapper">
+																<footer>
+																		<div class="wrapper">
 
-                                        <div id="footer-info">
-                                            <p>Copyright 2016 GoGoDeals. All rights reserved.</p>
-                                            <p><a href="#">Terms of Service</a> | <a href="#">Privacy</a></p>
-                                        </div>
-                                        <div id="footer-links">
-                                            <ul>
-                                                <li><h5>Company</h5></li>
-                                                <li><a href="#">About us</a></li>
-                                                <li><a href="#">Meet The Team</a></li>
-                                                <li><a href="#">What We Do</a></li>
-                                                <li><a href="#">Careers</a></li>
-                                            </ul>
-                                        </div>
-                                        <div class="clear"></div>
-                                    </div>
-                                </footer>
+																				<div id="footer-info">
+																						<p>Copyright 2016 GoGoDeals. All rights reserved.</p>
+																						<p><a href="#">Terms of Service</a> | <a href="#">Privacy</a></p>
+																				</div>
+																				<div id="footer-links">
+																						<ul>
+																								<li><h5>Company</h5></li>
+																								<li><a href="#">About us</a></li>
+																								<li><a href="#">Meet The Team</a></li>
+																								<li><a href="#">What We Do</a></li>
+																								<li><a href="#">Careers</a></li>
+																						</ul>
+																				</div>
+																				<div class="clear"></div>
+																		</div>
+																</footer>
 
 
 
 </html></body>
-<!--<script scr="http://code.jquery.com/jquery-1.11.3.min.js"></script>
-<script scr="menu.js"></script>-->
 </html>
